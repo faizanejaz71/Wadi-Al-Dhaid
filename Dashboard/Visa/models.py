@@ -24,12 +24,19 @@ class VisaDetails(models.Model):
 
     def __str__(self):
         return f"{self.country_name} ({self.visa_category.visa_category})"
-    
+# Person_type
+class PersonType(models.Model):
+    visa_details = models.ForeignKey(VisaDetails, on_delete=models.CASCADE)
+    person_type = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.person_type    
 
 # Visa Requirements
 class VisaRequirements(models.Model):
     visa_details = models.ForeignKey(VisaDetails, on_delete=models.CASCADE)
-    person_type = models.CharField(max_length=100)
+    person_type = models.ForeignKey(PersonType, on_delete=models.CASCADE)
+    # person_type = models.CharField(max_length=100)
 
 
     def __str__(self):
@@ -39,6 +46,7 @@ class VisaRequirements(models.Model):
 # Visa Documents
 class VisaDocuments(models.Model):
     visa_requirements = models.ForeignKey(VisaRequirements, on_delete=models.CASCADE)
+    person_type = models.ForeignKey(PersonType, on_delete=models.CASCADE, null=True, blank=True)
     document_name = models.CharField(max_length=100)
     document_description = models.TextField(null=True, blank=True)
 

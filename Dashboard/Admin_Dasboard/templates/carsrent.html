@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+  <!-- Content -->
+
+  <div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row w-100">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Car Rentals</h4>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"><i class='bx bx-plus'></i> Add Visas</button>
+          </div>
+          <!-- Modal -->
+          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                  </h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="card-body">
+                  <form>
+                    <div class=" mb-3">
+                      <label for="Name" id="Name">Enter your Name</label>
+                      <input type="text" placeholder="Enter Your name" class="form-control col-12">
+                    </div>
+                    <div class=" mb-3">
+                      <label for="text" id="Description">Enter description</label>
+                      <input type="text" placeholder="Enter description" class="form-control col-12">
+                    </div>
+                    <div class=" mb-3">
+                      <label for="text" id="Description">Price for Adult</label>
+                      <input type="text" placeholder="Price for adult" class="form-control col-12">
+                    </div>
+                    <div class=" mb-3">
+                      <label for="text" id="Description">Price for Child</label>
+                      <input type="text" placeholder="Price for child" class="form-control col-12">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Model</th>
+                  <th>Within City</th>
+                  <th>Out Of Station</th>
+                  <th>Terms/Condition</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <td>01</td>
+                <td>Australia</td>
+                <td>hello this your pilot</td>
+                <td>3000$</td>
+                <td>1000$</td>
+                <td><a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#visaRequirementModal">View/Add Terms</a></td>
+                <!-- Modal -->
+                
+                <!-- modal end -->
+                <td class="d-flex flex-row gap-2">
+                  <a href="#" class="btn btn-success">Approve</a>
+                  <a href="#" class="btn btn-danger">Reject</a>
+                </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="visaRequirementModal" tabindex="-1" aria-labelledby="modalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Business Owner</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <!-- Nav Tabs -->
+            <ul class="nav nav-tabs" id="requirementTabs" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="id-docs-tab" data-bs-toggle="tab" href="#id-docs"
+                  role="tab">Terms / Condition</a>
+              </li>
+             
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-3">
+
+              <!-- Identification Documents -->
+              <div class="tab-pane fade show active" id="id-docs" role="tabpanel">
+                <textarea class="form-control" rows="4">
+
+                  Please review the following terms carefully before making a booking. By confirming your vehicle reservation, you agree to adhere to these conditions.
+                  
+                  Payment Terms
+                  
+                      Full payment is required upfront: 50% at the time of booking and the remaining 50% upon vehicle delivery.
+                      Bookings are confirmed only after the initial 50% advance payment is received.
+                      A copy of your ID card or passport is required for identity verification.
+                  
+                  Fuel and Mileage
+                  
+                      Fuel measurement starts and ends at our base station.
+                      The vehicle must be returned with a full tank of fuel at the end of each day.
+                      Route changes or alterations to the travel plan are not permitted once the booking is confirmed.
+                  
+                  Chauffeur Service
+                  
+                      All vehicles are chauffeur-driven; self-driving is not permitted.
+                      Vehicles cannot exceed the rated capacity for passengers or luggage.
+                      The vehicle must not be used for illegal activities.
+                  
+                  Additional Costs
+                  
+                      The rental fee does not cover costs such as airport fees, parking, tolls, and applicable taxes.
+                      Cleaning fees may be applied if the vehicle is returned excessively dirty or stained.
+                      For outstation rentals, return fuel and toll charges will be applied if the vehicle is not returned to Lahore.
+                  
+                  Driver Allowance & Holidays
+                  
+                      For overnight trips outside of Lahore, customers are responsible for covering the driver’s accommodation and meals (Rs. 2,000 per night). A Rs. 500 meal allowance applies for trips within Lahore.
+                  
+                  Cancellations & Changes
+                  
+                      A 20% cancellation fee will apply if the booking is canceled (applicable if canceled within 48 hours of booking).
+                      If the rental period is cut short, the daily rate may be recalculated, and full payment for one day, including fuel and driver costs, will still be charged.
+                      Monthly rentals include six days of service per week and seven days of outstation travel within the agreed rate. Additional outstation days will incur separate charges.
+                  
+                  Responsibility & Liability
+                  
+                      Customers are responsible for safeguarding their personal belongings (phones, wallets, etc.). We do not assume liability for any loss or damage.
+                      Drivers will assist with loading and unloading luggage, but the customer must be present when their belongings are being handled.
+                      We reserve the right to substitute vehicles or drivers without prior notice.
+                      In case of breakdowns, particularly during outstation trips, backup vehicles or drivers are not guaranteed. Fuel and toll costs for the return journey may apply.
+                      We are not liable for delays caused by mechanical issues, misunderstandings, or unforeseen circumstances. While we may provide backup assistance, no compensation will be offered for delays.
+                  
+                  Prohibited Uses
+                  
+                      The transport of illegal items, weapons, drugs, or alcohol is strictly forbidden.
+                      Customers will be held accountable for any legal or security issues that arise if the vehicle is used in a dangerous area or for unlawful activities.
+                  
+                  Driver's Responsibilities
+                  
+                      Drivers are responsible for safe and timely driving, maintaining vehicle cleanliness, handling luggage, and collecting payments.
+                  
+                  Disclaimer
+                  
+                      We are not responsible for delays or disruptions due to strikes, road closures, public holidays, or other unforeseen events. Any additional costs, such as tolls or fuel for alternate routes, are the customer's responsibility. We advise considering such factors when planning your trip, especially during peak periods. No refunds or compensation will be provided for delays caused by these circumstances.
+                  
+                  Refund Policy
+                  
+                  At Yugo.pk, we strive to provide the best possible service to our clients. However, if you need to cancel your booking or are unsatisfied with our services, please review our refund policy below:
+                  
+                  Cancellation Refunds
+                  
+                      Cancellation Before Service Start:
+                          If you cancel your booking 48 hours or more before the scheduled service, you will receive a full refund of the advance payment.
+                          For cancellations made less than 48 hours before the service start, 70% of the advance payment will be refunded, and a 30% cancellation fee will apply.
+                      Last-Minute Cancellations (on the day of service):
+                          For cancellations made on the same day as the service, no refund will be provided.
+                  
+                  Service-Related Refunds
+                  
+                      Service Unavailability:
+                          If the booked vehicle is unavailable due to unforeseen circumstances, we will offer you a replacement vehicle. If no suitable replacement is available, a full refund will be provided.
+                      Mechanical Failure or Accidents:
+                          In case of mechanical issues or accidents, if the vehicle cannot complete the trip, we will attempt to provide an alternative. If no alternative is available, a refund will be processed for the unused portion of the rental.
+                      Client Dissatisfaction:
+                          If you are dissatisfied with the service provided, refunds will be considered on a case-by-case basis, depending on the nature of the complaint. Please contact us within 24 hours of the service to file a complaint for review.
+                  
+                  Non-Refundable Circumstances
+                  
+                      No refunds will be issued for:
+                          Early termination of the rental by the client.
+                          Delays caused by traffic, weather, or other circumstances beyond our control.
+                          Client’s failure to adhere to the terms and conditions of the rental agreement.
+                  
+                  Refund Process
+                  
+                      Refunds will be processed within 7-10 business days to the original payment method used during booking.
+                      Clients must provide proof of payment and booking confirmation when requesting a refund.
+                  
+                  For any further questions or assistance regarding refunds, please contact our customer support team directly.
+                  
+                </textarea>
+    
+                
+              </div>
+
+            
+
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save Requirements</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- modal end -->
+
+      <!-- Content wrapper -->
+    </div>
+    <!-- / Layout page -->
+  </div>
+<!-- / Layout wrapper -->
+{% endblock %}

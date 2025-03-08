@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="row w-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 fs-5">Select visa category to change </p>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addModal"><i class='bx bx-plus'></i> Add visa details</button>
+                    </div>
+                    <!-- seacrch input -->
+                    <div class="col-12 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12">
+                            <div class="search-person border-outline-dark bg-secondary-subtle p-1 d-flex mt-2 text-muted">
+                               <form action="">
+                                <div class="input-group  border-outline-dark">
+                                    <span class="input-group-text bg-white "><i
+                                            class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                                    <input type="text" class="form-control bg-white">
+
+                                </div>
+                               </form>
+                                <button class="btn btn-white bg-white border ms-2">Search</button>
+                            </div>
+                            <div>
+                                <div class="d-flex align-items-center py-3 personselect">
+                                    <label class="me-2">Action:</label>
+                                    <select class="form-select w-25 me-2">
+                                        <option>--------</option>
+                                        <option>Option 1</option>
+                                        <option>Option 2</option>
+                                    </select>
+                                    <button class="btn btn-sm bg-secondary-subtle border">Go</button>
+                                    <span class="ms-2">0 of 2 selected</span>
+                                </div>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            {% comment %} <th><input type="checkbox"></th> {% endcomment %}
+                                            <th>ID</th>
+                                            <th>Visa Category</th>
+                                            <th>Country Name</th>
+                                            <th>Adult Price</th>
+                                            <th>Actions</th>
+
+        
+                                        </tr>
+                                    </thead>        
+                                    <tbody>
+                                        {% for visa in visa_detail %}
+                                        <tr>
+                                            {% comment %} <td><input type="checkbox"></td> {% endcomment %}
+                                            <td>{{ visa.id }}</td>
+                                            <td>{{ visa.visa_category }}</td>
+                                            <td>{{ visa.country_name }}</td>
+                                            <td>{{ visa.adult_price }}</td>
+                                            <td class="d-flex flex-row gap-2">
+                                                <a href="#" class="btn btn-success">Edit</a>
+                                                <a href="#" class="btn btn-danger">Delete</a>
+                                            </td>         
+                                        </tr> 
+                                        <!-- Modal -->
+                                                
+                                        <!-- modal end -->
+                                        <!-- Update Modal -->
+                                        <div class="modal fade modal-lg" id="updateModal" data-bs-backdrop="static"
+                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="updateModalLabel">Update Visa Details</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <form action="">    
+                                                            <div class="row mb-3 align-items-center">
+                                                                <label class="col-md-2 label-small fw-bold">Visa Category:</label>
+                                                                <div class="col-md-4">
+                                                                    <select class="form-select" name="visa_category">
+                                                                        <option value="">--------</option>
+                                                                        {% for category in visa_category %}
+                                                                            <option value="{{ category.id }}">{{ category.visa_category }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row mb-3 align-items-center">
+                                                                <label class="col-md-2 label-small fw-bold">Country Name:</label>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" class="form-control bg-white" name="country_name" value="{{ visa.country_name }}">
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row mb-3 align-items-center">
+                                                                <label class="col-md-2 label-small">Adult Price:</label>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" class="form-control bg-white" name="adult_price" value="{{ visa.adult_price }}">
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row mb-3 align-items-center">
+                                                                <label class="col-md-2 label-small">Child Price:</label>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" class="form-control bg-white" name="child_price" value="{{ visa.child_price }}">
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row mb-3 align-items-center">
+                                                                <label class="col-md-2 label-small fw-bold">Image:</label>
+                                                                <div class="col-md-8">
+                                                                    <input type="file" class="form-control" name="image">
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row mb-3 align-items-center">
+                                                                <label class="col-md-2 label-small fw-bold">Description:</label>
+                                                                <div class="col-md-10">
+                                                                    <textarea class="form-control" rows="5" name="description">{{ visa.description }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                                                <button class="btn btn-sm btn-custom px-3">UPDATE</button>
+                                                                <button class="btn btn-sm btn-custom ms-2 px-3">Update and continue editing</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    </tbody>
+        
+                                </table>
+                                <p class="p-2">2 visa Categories</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- Add Modal -->
+                    <div class="modal fade modal-lg" id="addModal" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-0 fs-5">Add visa details</p>
+                                    <form action="{% url 'visa-details' %}" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-2 label-small fw-bold ">Visa Category:</label>
+                                            <div class="col-md-4 ">
+                                                <select class="form-select" name="visa_category">
+                                                    <option value="">--------</option>
+                                                    {% for category in visa_category %}
+                                                        <option value="{{ category.id }}">{{ category.visa_category }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <i class="fa-solid fa-pen text-light"></i>
+                                                <i class="fa-solid fa-plus text-success fs-5"></i>
+                                                <i class="fa-solid fa-eye"></i>
+                                            </div>
+                                        </div>
+                                    <hr>
+                                    <div class="row mb-3 align-items-center">
+                                        <label class="col-md-2 label-small fw-bold">Country Name:</label>
+                                        <div class="col-md-4">
+                                            <input type="text" name="country_name" class="form-control bg-white">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row mb-3 align-items-center">
+                                        <label class="col-md-2 label-small">Adult Price:</label>
+                                        <div class="col-md-4">
+                                            <input type="text" name="adult_price" class="form-control bg-white">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row mb-3 align-items-center">
+                                        <label class="col-md-2 label-small">Child Price:</label>
+                                        <div class="col-md-4">
+                                            <input type="text" name="child_price" class="form-control bg-white">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row mb-3 align-items-center">
+                                        <label class="col-md-2 label-small fw-bold">Image:</label>
+                                        <div class="col-md-8">
+                                            <input type="file" name="image" class="form-control">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row mb-3 align-items-center">
+                                        <label class="col-md-2 label-small fw-bold">Description:</label>
+                                        <div class="col-md-10">
+                                            <textarea name="description" class="form-control" rows="5"></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                        <hr>
+                                        <div class=" person-btn d-flex p-2 mt-3 w-75  border rounded">
+                                            <button type="submit" class="btn btn-sm btn-custom px-3">SAVE</button>
+                                            <button class="btn btn-sm btn-custom ms-2 px-3">Save and add another</button>
+                                            <button class="btn btn-sm btn-custom ms-2 px-3">Save and continue editing</button>
+                                        </div>
+                                    </form>
+                                    
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+
+            <!-- modal end -->
+
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+{% endblock %}

@@ -1,23 +1,25 @@
 from django.urls import path
-from .views import (UmrahCategoryView, UmrahCategoryView_id, 
-                    UmrahPackageView, UmrahPackageView_id, 
-                    LimitedOfferView, LimitedOfferView_id, 
-                    PlaceView, PlaceView_id)
+from .views import (
+    UmrahPackageCategoryView, UmrahPackageCategoryView_id,
+    UmrahDetailsView, UmrahDetailsView_id,
+    LimitedTimeOfferView, LimitedTimeOfferView_id,
+    OfferDetailsView, OfferDetailsView_id
+)
 
 urlpatterns = [
-    # Umrah Category URLs
-    path('umrah-categories/', UmrahCategoryView.as_view(), name='umrah-category-list'),
-    path('umrah-categories/<int:id>/', UmrahCategoryView_id.as_view(), name='umrah-category-detail'),
+    # Umrah Package Category URLs
+    path('umrah-package-categories/', UmrahPackageCategoryView.as_view(), name='umrah-package-category-list'),
+    path('umrah-package-categories/<int:id>/', UmrahPackageCategoryView_id.as_view(), name='umrah-package-category-detail'),
 
-    # Umrah Package URLs
-    path('umrah-packages/', UmrahPackageView.as_view(), name='umrah-package-list'),
-    path('umrah-packages/<int:id>/', UmrahPackageView_id.as_view(), name='umrah-package-detail'),
+    # Umrah Details URLs
+    path('umrah-details/', UmrahDetailsView.as_view(), name='umrah-details-list'),
+    path('umrah-details/<int:id>/', UmrahDetailsView_id.as_view(), name='umrah-details-detail'),
 
-    # Limited Offer URLs
-    path('limited-offers/', LimitedOfferView.as_view(), name='limited-offer-list'),
-    path('limited-offers/<int:id>/', LimitedOfferView_id.as_view(), name='limited-offer-detail'),
+    # Limited Time Offer URLs
+    path('limited-time-offers/', LimitedTimeOfferView.as_view(), name='limited-time-offer-list'),
+    path('limited-time-offers/<int:id>/', LimitedTimeOfferView_id.as_view(), name='limited-time-offer-detail'),
 
-    # Places URLs
-    path('places/', PlaceView.as_view(), name='place-list'),
-    path('places/<int:id>/', PlaceView_id.as_view(), name='place-detail'),
+    # Offer Details URLs
+    path('offer-details/', OfferDetailsView.as_view(), name='offer-details-list'),
+    path('offer-details/<int:id>/', OfferDetailsView_id.as_view(), name='offer-details-detail'),
 ]

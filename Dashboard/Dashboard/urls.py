@@ -16,9 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #template urls
+    path('', include('Admin_Dasboard.urls')),
+
+
+
+    # Api urls
     path('api/v1/visa/', include('Visa.urls')),
     path('api/v1/umrah/', include('Umrah.urls')),
     path('api/v1/tour/', include('Tour.urls')),
@@ -26,4 +34,4 @@ urlpatterns = [
     path('api/v1/user/', include('User.urls')),
 
     
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

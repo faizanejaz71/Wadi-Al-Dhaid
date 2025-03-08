@@ -1,22 +1,26 @@
 from rest_framework import serializers
-from .models import UmrahCategory, UmrahPackage, LimitedOffer, Place
+from .models import UmrahPackageCategory, UmrahDetails, LimitedTimeOffer, OfferDetails
 
-class UmrahCategorySerializer(serializers.ModelSerializer):
+# Umrah Package Category Serializer
+class UmrahPackageCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = UmrahCategory
+        model = UmrahPackageCategory
         fields = '__all__'
 
-class UmrahPackageSerializer(serializers.ModelSerializer):
+# Umrah Details Serializer
+class UmrahDetailsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UmrahPackage
+        model = UmrahDetails
         fields = '__all__'
 
-class LimitedOfferSerializer(serializers.ModelSerializer):
+# Limited Time Offer Serializer
+class LimitedTimeOfferSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LimitedOffer
+        model = LimitedTimeOffer
         fields = '__all__'
 
-class PlaceSerializer(serializers.ModelSerializer):
+# Offer Details Serializer (Includes Image & Title Fields)
+class OfferDetailsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Place
+        model = OfferDetails
         fields = '__all__'

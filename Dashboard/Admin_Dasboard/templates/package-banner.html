@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row w-100">
+                      <div class="col-12">
+                          <div class="card">
+                              <div class="card-body">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="mb-0">Package Banner</h4>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createLinksModal"><i class='bx bx-plus'></i> Add Services</button>
+                                  </div>
+                                  <div class="modal fade" id="createLinksModal" tabindex="-1">
+                                    <div class="modal-dialog">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title">Edit Packages</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">Package Name</label>
+                                                    <input type="text" class="form-control shadow-none" placeholder="Enter Name" id="Name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">Leisure/group/adventure</label>
+                                                    <input type="text" class="form-control shadow-none" placeholder="For Leisure/group/adventure" id="Name">
+                                                </div>
+                                                <div class="mb-3">
+                                                  <label for="urls" class="form-label">Package Price</label>
+                                                  <input type="text" class="form-control shadow-none" placeholder="price" id="urls">
+                                              </div>
+                                                <div class="mb-3 text-end">
+                                                    <button type="submit" class="btn btn-primary">Update Now</button>
+                                                </div>
+                                              </form>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                                  </div>
+                                  <div class="my-2 table-responsive">
+                                      <table class="table">
+                                          <thead>
+                                              <tr>
+                                                  <th>#</th>
+                                                  <th>Leisure/group/adventure</th>
+                                                  <th>Package name</th>
+                                                  <th>image</th>
+                                                  <th>Price</th>
+                                                  <th>Actions</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr>
+                                                  <td>1</td>
+                                                  <td>Group Tour</td>
+                                                  <td>
+                                                    Group Tour
+                                                    Explore Europe (9 Days)</td>
+                                                  <td><img src="{% static 'assets/img/pexels-chevanon-333525.jpg' %}" class="img-fluid rounded" width="100" alt=""></td>
+                                                  <td> PKR 485,000</td>
+                                                  <td>
+                                                      <a href="#" data-bs-toggle="modal" data-bs-target="#edit1LinksModal" class="btn btn-primary">Edit</a>
+                                                      
+                                                  </td>
+                                              </tr>
+                                             
+                                              
+                                              <div class="modal fade" id="edit1LinksModal" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title">Edit Packages</h5>
+                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form>
+                                                            <div class="mb-3">
+                                                                <label for="name" class="form-label">Package Name</label>
+                                                                <input type="text" class="form-control shadow-none" placeholder="Enter Name" id="Name">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="name" class="form-label">Leisure/group/adventure</label>
+                                                                <input type="text" class="form-control shadow-none" placeholder="For Leisure/group/adventure" id="Name">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                              <label for="urls" class="form-label">Package Price</label>
+                                                              <input type="text" class="form-control shadow-none" placeholder="price" id="urls">
+                                                          </div>
+                                                            <div class="mb-3 text-end">
+                                                                <button type="submit" class="btn btn-primary">Update Now</button>
+                                                            </div>
+                                                          </form>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                          </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+               
+                
+            <!-- Content wrapper -->
+          </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    {% endblock %}

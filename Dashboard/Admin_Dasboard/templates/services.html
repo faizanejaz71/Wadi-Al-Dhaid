@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row w-100">
+                      <div class="col-12">
+                          <div class="card">
+                              <div class="card-body">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="mb-0">Services Card</h4>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createLinksModal"><i class='bx bx-plus'></i> Add Services</button>
+                                  </div>
+                                  <div class="modal fade" id="createLinksModal" tabindex="-1">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title">Add Services</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                           
+                                            <form>
+                                              <div class="mb-3">
+                                                  <label for="name" class="form-label">Service Name</label>
+                                                  <input type="text" class="form-control shadow-none" placeholder="Enter Name" id="Name">
+                                              </div>
+                                              <div class="mb-3">
+                                                <label for="urls" class="form-label">images</label>
+                                                <input type="file" class="form-control shadow-none" placeholder="url e.g /visas" id="urls">
+                                            </div>
+                                              <div class="mb-3 text-end">
+                                                  <button type="submit" class="btn btn-primary">Submit now</button>
+                                              </div>
+                                            </form>
+                                           </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </div>
+                                  <div class="my-2 table-responsive">
+                                      <table class="table">
+                                          <thead>
+                                              <tr>
+                                                  <th>#</th>
+                                                  <th>Service name</th>
+                                                  <th>Images</th>
+                                                  <th>Actions</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr>
+                                                  <td>1</td>
+                                                  <td>Flights</td>
+                                                  <td><img src="{% static 'assets/img/pexels-chevanon-333525.jpg' %}" class="img-fluid rounded" width="80" alt=""></td>
+                                                  <td>
+                                                      <a href="#" data-bs-toggle="modal" data-bs-target="#edit1LinksModal" class="btn btn-primary">Edit</a>
+                                                      
+                                                  </td>
+                                              </tr>
+                                             
+                                              
+                                              <div class="modal fade" id="edit1LinksModal" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title">Edit Service</h5>
+                                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form>
+                                                            <div class="mb-3">
+                                                                <label for="name" class="form-label">Service Name</label>
+                                                                <input type="text" class="form-control shadow-none" placeholder="Enter Name" id="Name">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                              <label for="urls" class="form-label">Video</label>
+                                                              <input type="file" class="form-control shadow-none" placeholder="url e.g /visas" id="urls">
+                                                          </div>
+                                                            <div class="mb-3 text-end">
+                                                                <button type="submit" class="btn btn-primary">Update Now</button>
+                                                            </div>
+                                                          </form>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                          </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+               
+                
+            <!-- Content wrapper -->
+          </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    {% endblock %}

@@ -1,22 +1,30 @@
 from django.urls import path
-from .views import VisaCategoryView, VisaCategoryView_id, VisaDetailsView, VisaDetailsView_id, VisaRequirementsView, VisaRequirementsView_id, VisaDocumentsView, VisaDocumentsView_id
+from .views import (
+    VisaCategoryView, VisaCategoryDetailView,
+    VisaDetailsView, VisaDetailsDetailView,
+    PersonTypeView, PersonTypeDetailView,
+    VisaRequirementsView, VisaRequirementsDetailView,
+    VisaDocumentsView, VisaDocumentsDetailView
+)
 
 urlpatterns = [
-
-    #Visa Category
+    # Visa Category URLs
     path('visa-categories/', VisaCategoryView.as_view(), name='visa-category-list'),
-    path('visa-categories/<int:id>/', VisaCategoryView_id.as_view(), name='visa-category-detail'),
+    path('visa-categories/<int:id>/', VisaCategoryDetailView.as_view(), name='visa-category-detail'),
 
-    #Visa Details
+    # Visa Details URLs
     path('visa-details/', VisaDetailsView.as_view(), name='visa-details-list'),
-    path('visa-details/<int:id>/', VisaDetailsView_id.as_view(), name='visa-details-detail'),
+    path('visa-details/<int:id>/', VisaDetailsDetailView.as_view(), name='visa-details-detail'),
 
-    #Visa Requirements
+    # Person Type URLs
+    path('person-types/', PersonTypeView.as_view(), name='person-type-list'),
+    path('person-types/<int:id>/', PersonTypeDetailView.as_view(), name='person-type-detail'),
+
+    # Visa Requirements URLs
     path('visa-requirements/', VisaRequirementsView.as_view(), name='visa-requirements-list'),
-    path('visa-requirements/<int:id>/', VisaRequirementsView_id.as_view(), name='visa-requirements-detail'),
+    path('visa-requirements/<int:id>/', VisaRequirementsDetailView.as_view(), name='visa-requirements-detail'),
 
-    #Visa Documents
+    # Visa Documents URLs
     path('visa-documents/', VisaDocumentsView.as_view(), name='visa-documents-list'),
-    path('visa-documents/<int:id>/', VisaDocumentsView_id.as_view(), name='visa-documents-detail'),
-
+    path('visa-documents/<int:id>/', VisaDocumentsDetailView.as_view(), name='visa-documents-detail'),
 ]

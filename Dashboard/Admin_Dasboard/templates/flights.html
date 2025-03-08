@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+  
+            <div class="container-xxl flex-grow-1 container-p-y">
+  
+              <div class="row w-100">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h4 class="mb-0">Flights</h4>
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop"><i class='bx bx-plus'></i> Add Flights</button>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                      tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="card-body">
+                            <form>
+                              <div class=" mb-3">
+                                <label for="Name" id="Name">Enter your Name</label>
+                                <input type="text" placeholder="Enter Your name" class="form-control col-12">
+                              </div>
+                              <div class=" mb-3">
+                                <label for="text" id="Description">Enter description</label>
+                                <input type="text" placeholder="Enter description" class="form-control col-12">
+                              </div>
+                              <div class=" mb-3">
+                                <label for="text" id="Description">Price for Adult</label>
+                                <input type="text" placeholder="Price for adult" class="form-control col-12">
+                              </div>
+                              <div class=" mb-3">
+                                <label for="text" id="Description">Price for Child</label>
+                                <input type="text" placeholder="Price for child" class="form-control col-12">
+                              </div>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">Understood</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price for Adult</th>
+                            <th>Price for Child</th>
+                            <th>Details</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <td>01</td>
+                          <td>Australia</td>
+                          <td>hello this your pilot</td>
+                          <td>3000$</td>
+                          <td>1000$</td>
+                          <td><a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                              data-bs-target="#visaRequirementModal">View/Add Details</a></td>
+                          <!-- Modal -->
+                          
+                          <!-- modal end -->
+                          <td class="d-flex flex-row gap-2">
+                            <a href="#" class="btn btn-success">Edit</a>
+                            <a href="#" class="btn btn-danger">Delete</a>
+                          </td>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal fade" id="visaRequirementModal" tabindex="-1" aria-labelledby="modalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modalLabel">Business Owner</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+  
+                      <!-- Nav Tabs -->
+                      <ul class="nav nav-tabs" id="requirementTabs" role="tablist">
+                        <li class="nav-item">
+                          <a class="nav-link active" id="id-docs-tab" data-bs-toggle="tab" href="#id-docs"
+                            role="tab">Identification</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="financial-docs-tab" data-bs-toggle="tab"
+                            href="#financial-docs" role="tab">Financial</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="supporting-docs-tab" data-bs-toggle="tab"
+                            href="#supporting-docs" role="tab">Supporting</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="important-notes-tab" data-bs-toggle="tab"
+                            href="#important-notes" role="tab">Important Notes</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="faqs-tab" data-bs-toggle="tab" href="#faqs"
+                            role="tab">FAQs</a>
+                        </li>
+                      </ul>
+  
+                      <!-- Tab Content -->
+                      <div class="tab-content mt-3">
+  
+                        <!-- Identification Documents -->
+                        <div class="tab-pane fade show active" id="id-docs" role="tabpanel">
+                          <textarea class="form-control" rows="4">CNIC (National ID Card) scanned colored copy
+                            Passport-Original and all previous passports
+                            One recent colored 2 x 2 inches photograph on a white background
+                            FRC (Family Registration Certificate) from NADRA
+                          </textarea>
+              
+                          
+                        </div>
+  
+                        <!-- Financial Documents -->
+                        <div class="tab-pane fade" id="financial-docs" role="tabpanel">
+                          <textarea class="form-control" rows="4" placeholder="">Solo travelers need a 6-month personal bank statement (minimum balance PKR
+                            1,000,000) on the bank's letterhead, including bank details, and for families
+                            (minimum PKR 2,500,000). Avoid sudden deposits.
+                         Personal Income Tax Returns / Tax deduction certificate of last 3 years
+                            </textarea>
+     
+                        </div>
+  
+                        <!-- Supporting Documents -->
+                        <div class="tab-pane fade" id="supporting-docs" role="tabpanel">
+                          <textarea class="form-control" rows="4" placeholder="">Proof of Proprietorship / Partnership (In case the applicant is a Proprietor
+                            / Partner in a firm)
+                          Company Registration Certificate / Certificate of Incorporation
+                          Chamber of Commerce Certificate if you have a membership with the Chamber of
+                            Commerce
+                          Company Income Tax returns for the last 3 years (If filed separately)
+                          Original Business Current Bank Account Statement for last 6 months
+                            mentioning the Business Name and Account No. on the Bank’s letterhead with the
+                            seal and sign of the bank officer.
+                          Relative/s in Australia (if any)</textarea>
+                        
+                        </div>
+  
+                        <!-- Important Notes -->
+                        <div class="tab-pane fade" id="important-notes" role="tabpanel">
+                          <textarea class="form-control" rows="4" placeholder="Enter Important Notes"></textarea>
+                            
+                          
+                        </div>
+  
+                        <!-- FAQs -->
+                        <div class="tab-pane fade" id="faqs" role="tabpanel">
+                          <textarea class="form-control" rows="4" placeholder="Enter FAQs"></textarea>
+                        </div>
+  
+                      </div>
+  
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save Requirements</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  <!-- modal end -->
+  
+                <!-- Content wrapper -->
+              </div>
+              <!-- / Layout page -->
+            </div>
+            {% endblock %}

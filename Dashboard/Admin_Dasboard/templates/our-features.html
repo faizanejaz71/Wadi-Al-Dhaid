@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row w-100">
+                      <div class="col-12">
+                          <div class="card">
+                              <div class="card-body">
+                                  <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="mb-0">our features</h4>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createLinksModal"><i class='bx bx-plus'></i>Add features</button>
+                                  </div>
+                                  <div class="modal fade" id="createLinksModal" tabindex="-1">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <h5 class="modal-title">Add features</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                           <div class="form">
+                                            <div class="mb-3">
+                                                <label for="urls" class="form-label">Logo</label>
+                                                <input type="file" class="form-control shadow-none" placeholder="url e.g /visas" id="urls">
+                                            </div>
+                                              <div class="mb-3">
+                                                  <label for="name" class="form-label">feat heading</label>
+                                                  <input type="text" class="form-control shadow-none" placeholder="Enter features heading" id="Name">
+                                              </div>
+                                              <div class="mb-3">
+                                                <label for="name" class="form-label">feat discription</label>
+                                                <input type="text" class="form-control shadow-none" placeholder="Enter featured discription" id="Name">
+                                            </div>
+                                              <div class="mb-3 text-end">
+                                                  <button type="submit" class="btn btn-primary">Submit now</button>
+                                              </div>
+                                           </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </div>
+                                  <div class="my-2 table-responsive">
+                                      <table class="table">
+                                          <thead>
+                                              <tr>
+                                                  <th>#</th>
+                                                  <th>Logo</th>
+                                                  <th>Headings</th>
+                                                  <th>discription</th>
+                                                  <th>Actions</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr>
+                                                  <td>1</td>
+                                                  <td><img src="{% static 'assets/img/Xiaomi New 2021 Years.png' %}" class="img-fluid" width="60" alt=""></td>
+                                                  <td>pro pakistanikjqanbZiasnzIn</td>
+                                                  <td>wusagzxciuasbzibweiusa</td>
+                                                  <td>
+                                                      <a href="#" data-bs-toggle="modal" data-bs-target="#editLinksModal" class="btn btn-primary">Edit</a>
+                                                      <a href="#" class="btn btn-danger">Delete</a>
+                                                  </td>
+                                              </tr>
+                                              <div class="modal fade" id="editLinksModal" tabindex="-1">
+                                                  <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title">Edit Featured</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                       <div class="form">
+                                                        <div class="mb-3">
+                                                          <label for="urls" class="form-label">logo</label>
+                                                          <input type="file" class="form-control shadow-none" placeholder="" id="urls" value="/visas">
+                                                      </div>
+                                                          <div class="mb-3">
+                                                              <label for="name" class="form-label">featured Name</label>
+                                                              <input type="text" class="form-control shadow-none" placeholder="Enter Name" id="Name" value="pro-pakistan">
+                                                          </div>
+                                                          <div class="mb-3">
+                                                            <label for="urls" class="form-label">description</label>
+                                                            <input type="text" class="form-control shadow-none" placeholder="description" id="urls" value="wjsazkujas">
+                                                        </div>
+                                                          <div class="mb-3 text-end">
+                                                              <button type="submit" class="btn btn-primary">update now</button>
+                                                          </div>
+                                                       </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                              </div>
+                                          </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+               
+                
+            <!-- Content wrapper -->
+          </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    {% endblock %}

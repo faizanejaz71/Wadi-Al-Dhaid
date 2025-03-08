@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+
+            <div class="row w-100">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Visas</h4>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                      data-bs-target="#staticBackdrop"><i class='bx bx-plus'></i> Add Visas</button>
+                  </div>
+                  <!-- Modal -->
+                  <div class="modal fade modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                          </h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="card-body">
+                          <form >
+                            <div class=" mb-3">
+                              <label for="Name" id="Name">Enter your Name</label>
+                              <input type="text" placeholder="Enter Your name" class="form-control col-12">
+                            </div>
+                            <div class=" mb-3">
+                              <label for="text" id="Description">Enter description</label>
+                              <input type="text" placeholder="Enter description" class="form-control col-12">
+                            </div>
+                            <div class=" mb-3">
+                              <label for="text" id="Description">Price for Adult</label>
+                              <input type="text" placeholder="Price for adult" class="form-control col-12">
+                            </div>
+                            <div class=" mb-3">
+                              <label for="text" id="Description">Price for Child</label>
+                              <input type="text" placeholder="Price for child" class="form-control col-12">
+                            </div>
+                            <div>
+                              <h3>Job Holder</h3>
+                              <ul class="nav nav-tabs" id="requirementTabsJob" role="tablist">
+                                  <li class="nav-item">
+                                      <a class="nav-link active" id="id-docs-job-tab" data-bs-toggle="tab" href="#id-docs-job"
+                                          role="tab">Identification</a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a class="nav-link" id="financial-docs-job-tab" data-bs-toggle="tab" href="#financial-docs-job" role="tab">Financial</a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a class="nav-link" id="supporting-docs-job-tab" data-bs-toggle="tab" href="#supporting-docs-job" role="tab">Supporting</a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a class="nav-link" id="important-notes-job-tab" data-bs-toggle="tab" href="#important-notes-job" role="tab">Important Notes</a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a class="nav-link" id="faqs-job-tab" data-bs-toggle="tab" href="#faqs-job" role="tab">FAQs</a>
+                                  </li>
+                              </ul>
+                          
+                              <div class="tab-content mt-3">
+                                  <div class="tab-pane fade show active" id="id-docs-job" role="tabpanel">
+                                      <textarea class="form-control" rows="4">CNIC (National ID Card) scanned colored copy
+                                          Passport-Original and all previous passports
+                                          One recent colored 2 x 2 inches photograph on a white background
+                                          FRC (Family Registration Certificate) from NADRA</textarea>
+                                  </div>
+                                  <div class="tab-pane fade" id="financial-docs-job" role="tabpanel">
+                                      <textarea class="form-control" rows="4">Solo travelers need a 6-month personal bank statement (minimum balance PKR
+                                          1,000,000) on the bank's letterhead, including bank details, and for families
+                                          (minimum PKR 2,500,000). Avoid sudden deposits.
+                                          Personal Income Tax Returns / Tax deduction certificate of last 3 years</textarea>
+                                  </div>
+                                  <div class="tab-pane fade" id="supporting-docs-job" role="tabpanel">
+                                      <textarea class="form-control" rows="4">Proof of Proprietorship / Partnership (In case the applicant is a Proprietor
+                                          / Partner in a firm)
+                                          Company Registration Certificate / Certificate of Incorporation
+                                          Chamber of Commerce Certificate if you have a membership with the Chamber of Commerce
+                                          Company Income Tax returns for the last 3 years (If filed separately)
+                                          Original Business Current Bank Account Statement for last 6 months
+                                          mentioning the Business Name and Account No. on the Bank’s letterhead with the
+                                          seal and sign of the bank officer.
+                                          Relative/s in Australia (if any)</textarea>
+                                  </div>
+                                  <div class="tab-pane fade" id="important-notes-job" role="tabpanel">
+                                      <textarea class="form-control" rows="4" placeholder="Enter Important Notes"></textarea>
+                                  </div>
+                                  <div class="tab-pane fade" id="faqs-job" role="tabpanel">
+                                      <textarea class="form-control" rows="4" placeholder="Enter FAQs"></textarea>
+                                  </div>
+                              </div>
+                          </div>
+                          <div>
+                            <h3>Retaire person</h3> 
+                            <ul class="nav nav-tabs" id="requirementTabsRetiree" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="id-docs-retiree-tab" data-bs-toggle="tab" href="#id-docs-retiree" role="tab">Identification</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="financial-docs-retiree-tab" data-bs-toggle="tab" href="#financial-docs-retiree" role="tab">Financial</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="supporting-docs-retiree-tab" data-bs-toggle="tab" href="#supporting-docs-retiree" role="tab">Supporting</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="important-notes-retiree-tab" data-bs-toggle="tab" href="#important-notes-retiree" role="tab">Important Notes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="faqs-retiree-tab" data-bs-toggle="tab" href="#faqs-retiree" role="tab">FAQs</a>
+                                </li>
+                            </ul>
+                        
+                            <div class="tab-content mt-3">
+                                <div class="tab-pane fade show active" id="id-docs-retiree" role="tabpanel">
+                                    <textarea class="form-control" rows="4">CNIC (National ID Card) scanned colored copy
+                                        Passport-Original and all previous passports
+                                        One recent colored 2 x 2 inches photograph on a white background
+                                        FRC (Family Registration Certificate) from NADRA</textarea>
+                                </div>
+                                <div class="tab-pane fade" id="financial-docs-retiree" role="tabpanel">
+                                    <textarea class="form-control" rows="4">Solo travelers need a 6-month personal bank statement (minimum balance PKR
+                                        1,000,000) on the bank's letterhead, including bank details, and for families
+                                        (minimum PKR 2,500,000). Avoid sudden deposits.
+                                        Personal Income Tax Returns / Tax deduction certificate of last 3 years</textarea>
+                                </div>
+                                <div class="tab-pane fade" id="supporting-docs-retiree" role="tabpanel">
+                                    <textarea class="form-control" rows="4">Proof of Proprietorship / Partnership (In case the applicant is a Proprietor
+                                        / Partner in a firm)
+                                        Company Registration Certificate / Certificate of Incorporation
+                                        Chamber of Commerce Certificate if you have a membership with the Chamber of Commerce
+                                        Company Income Tax returns for the last 3 years (If filed separately)
+                                        Original Business Current Bank Account Statement for last 6 months
+                                        mentioning the Business Name and Account No. on the Bank’s letterhead with the
+                                        seal and sign of the bank officer.
+                                        Relative/s in Australia (if any)</textarea>
+                                </div>
+                                <div class="tab-pane fade" id="important-notes-retiree" role="tabpanel">
+                                    <textarea class="form-control" rows="4" placeholder="Enter Important Notes"></textarea>
+                                </div>
+                                <div class="tab-pane fade" id="faqs-retiree" role="tabpanel">
+                                    <textarea class="form-control" rows="4" placeholder="Enter FAQs"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3>Dependent/student</h3> 
+                            <ul class="nav nav-tabs" id="requirementTabsStudent" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="id-docs-student-tab" data-bs-toggle="tab" href="#id-docs-student" role="tab">Identification</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="financial-docs-student-tab" data-bs-toggle="tab" href="#financial-docs-student" role="tab">Financial</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="supporting-docs-student-tab" data-bs-toggle="tab" href="#supporting-docs-student" role="tab">Supporting</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="important-notes-student-tab" data-bs-toggle="tab" href="#important-notes-student" role="tab">Important Notes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="faqs-student-tab" data-bs-toggle="tab" href="#faqs-student" role="tab">FAQs</a>
+                                </li>
+                            </ul>
+                        
+                            <div class="tab-content mt-3">
+                                <div class="tab-pane fade show active" id="id-docs-student" role="tabpanel">
+                                    <textarea class="form-control" rows="4">CNIC (National ID Card) scanned colored copy
+                                        Passport-Original and all previous passports
+                                        One recent colored 2 x 2 inches photograph on a white background
+                                        FRC (Family Registration Certificate) from NADRA</textarea>
+                                </div>
+                                <div class="tab-pane fade" id="financial-docs-student" role="tabpanel">
+                                    <textarea class="form-control" rows="4">Solo travelers need a 6-month personal bank statement (minimum balance PKR
+                                        1,000,000) on the bank's letterhead, including bank details, and for families
+                                        (minimum PKR 2,500,000). Avoid sudden deposits.
+                                        Personal Income Tax Returns / Tax deduction certificate of last 3 years</textarea>
+                                </div>
+                                <div class="tab-pane fade" id="supporting-docs-student" role="tabpanel">
+                                    <textarea class="form-control" rows="4">Proof of Proprietorship / Partnership (In case the applicant is a Proprietor
+                                        / Partner in a firm)
+                                        Company Registration Certificate / Certificate of Incorporation
+                                        Chamber of Commerce Certificate if you have a membership with the Chamber of Commerce
+                                        Company Income Tax returns for the last 3 years (If filed separately)
+                                        Original Business Current Bank Account Statement for last 6 months
+                                        mentioning the Business Name and Account No. on the Bank’s letterhead with the
+                                        seal and sign of the bank officer.
+                                        Relative/s in Australia (if any)</textarea>
+                                </div>
+                                <div class="tab-pane fade" id="important-notes-student" role="tabpanel">
+                                    <textarea class="form-control" rows="4" placeholder="Enter Important Notes"></textarea>
+                                </div>
+                                <div class="tab-pane fade" id="faqs-student" role="tabpanel">
+                                    <textarea class="form-control" rows="4" placeholder="Enter FAQs"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-primary">Understood</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                          <th>Description</th>
+                          <th>Price for Adult</th>
+                          <th>Price for Child</th>
+                          <th>Details</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      {% for visas in visa %}
+                      <tbody>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{visas.country_name}}</td>
+                        <td>{{visas.description}}</td>
+                        <td>{{visas.adult_price}}$</td>
+                        <td>{{visas.child_price}}$</td>
+                        <td><a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#visaRequirementModal">View/Add Details</a></td>
+                        <!-- Modal -->
+                        
+                        <!-- modal end -->
+                        <td class="d-flex flex-row gap-2">
+                          <a href="#" class="btn btn-success">Edit</a>
+                          <a href="#" class="btn btn-danger">Delete</a>
+                        </td>
+                      </tbody>
+                      {% endfor %}
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="modal fade" id="visaRequirementModal" tabindex="-1" aria-labelledby="modalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Requirements</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                      aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                      <h3>Business Owner</h3>
+                      <ul class="nav nav-tabs" id="requirementTabsBusiness" role="tablist">
+                          <li class="nav-item">
+                              <a class="nav-link active" id="id-docs-business-tab" data-bs-toggle="tab" href="#id-docs-business"
+                                  role="tab">Identification</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="financial-docs-business-tab" data-bs-toggle="tab" href="#financial-docs-business" role="tab">Financial</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="supporting-docs-business-tab" data-bs-toggle="tab" href="#supporting-docs-business" role="tab">Supporting</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="important-notes-business-tab" data-bs-toggle="tab" href="#important-notes-business" role="tab">Important Notes</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="faqs-business-tab" data-bs-toggle="tab" href="#faqs-business" role="tab">FAQs</a>
+                          </li>
+                      </ul>
+                  
+                      <div class="tab-content mt-3">
+                          <div class="tab-pane fade show active" id="id-docs-business" role="tabpanel">
+                              <textarea class="form-control" rows="4">CNIC (National ID Card) scanned colored copy
+                                  Passport-Original and all previous passports
+                                  One recent colored 2 x 2 inches photograph on a white background
+                                  FRC (Family Registration Certificate) from NADRA</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="financial-docs-business" role="tabpanel">
+                              <textarea class="form-control" rows="4">Solo travelers need a 6-month personal bank statement (minimum balance PKR
+                                  1,000,000) on the bank's letterhead, including bank details, and for families
+                                  (minimum PKR 2,500,000). Avoid sudden deposits.
+                                  Personal Income Tax Returns / Tax deduction certificate of last 3 years</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="supporting-docs-business" role="tabpanel">
+                              <textarea class="form-control" rows="4">Proof of Proprietorship / Partnership (In case the applicant is a Proprietor
+                                  / Partner in a firm)
+                                  Company Registration Certificate / Certificate of Incorporation
+                                  Chamber of Commerce Certificate if you have a membership with the Chamber of Commerce
+                                  Company Income Tax returns for the last 3 years (If filed separately)
+                                  Original Business Current Bank Account Statement for last 6 months
+                                  mentioning the Business Name and Account No. on the Bank’s letterhead with the
+                                  seal and sign of the bank officer.
+                                  Relative/s in Australia (if any)</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="important-notes-business" role="tabpanel">
+                              <textarea class="form-control" rows="4" placeholder="Enter Important Notes"></textarea>
+                          </div>
+                          <div class="tab-pane fade" id="faqs-business" role="tabpanel">
+                              <textarea class="form-control" rows="4" placeholder="Enter FAQs"></textarea>
+                          </div>
+                      </div>
+                  </div>
+                      <div>
+                        <h3>Job Holder</h3>
+                        <ul class="nav nav-tabs" id="requirementTabsJob" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="id-docs-job-tab" data-bs-toggle="tab" href="#id-docs-job"
+                                    role="tab">Identification</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="financial-docs-job-tab" data-bs-toggle="tab" href="#financial-docs-job" role="tab">Financial</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="supporting-docs-job-tab" data-bs-toggle="tab" href="#supporting-docs-job" role="tab">Supporting</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="important-notes-job-tab" data-bs-toggle="tab" href="#important-notes-job" role="tab">Important Notes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="faqs-job-tab" data-bs-toggle="tab" href="#faqs-job" role="tab">FAQs</a>
+                            </li>
+                        </ul>
+                    
+                        <div class="tab-content mt-3">
+                            <div class="tab-pane fade show active" id="id-docs-job" role="tabpanel">
+                                <textarea class="form-control" rows="4">CNIC (National ID Card) scanned colored copy
+                                    Passport-Original and all previous passports
+                                    One recent colored 2 x 2 inches photograph on a white background
+                                    FRC (Family Registration Certificate) from NADRA</textarea>
+                            </div>
+                            <div class="tab-pane fade" id="financial-docs-job" role="tabpanel">
+                                <textarea class="form-control" rows="4">Solo travelers need a 6-month personal bank statement (minimum balance PKR
+                                    1,000,000) on the bank's letterhead, including bank details, and for families
+                                    (minimum PKR 2,500,000). Avoid sudden deposits.
+                                    Personal Income Tax Returns / Tax deduction certificate of last 3 years</textarea>
+                            </div>
+                            <div class="tab-pane fade" id="supporting-docs-job" role="tabpanel">
+                                <textarea class="form-control" rows="4">Proof of Proprietorship / Partnership (In case the applicant is a Proprietor
+                                    / Partner in a firm)
+                                    Company Registration Certificate / Certificate of Incorporation
+                                    Chamber of Commerce Certificate if you have a membership with the Chamber of Commerce
+                                    Company Income Tax returns for the last 3 years (If filed separately)
+                                    Original Business Current Bank Account Statement for last 6 months
+                                    mentioning the Business Name and Account No. on the Bank’s letterhead with the
+                                    seal and sign of the bank officer.
+                                    Relative/s in Australia (if any)</textarea>
+                            </div>
+                            <div class="tab-pane fade" id="important-notes-job" role="tabpanel">
+                                <textarea class="form-control" rows="4" placeholder="Enter Important Notes"></textarea>
+                            </div>
+                            <div class="tab-pane fade" id="faqs-job" role="tabpanel">
+                                <textarea class="form-control" rows="4" placeholder="Enter FAQs"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                      <h3>Retaire person</h3> 
+                      <ul class="nav nav-tabs" id="requirementTabsRetiree" role="tablist">
+                          <li class="nav-item">
+                              <a class="nav-link active" id="id-docs-retiree-tab" data-bs-toggle="tab" href="#id-docs-retiree" role="tab">Identification</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="financial-docs-retiree-tab" data-bs-toggle="tab" href="#financial-docs-retiree" role="tab">Financial</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="supporting-docs-retiree-tab" data-bs-toggle="tab" href="#supporting-docs-retiree" role="tab">Supporting</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="important-notes-retiree-tab" data-bs-toggle="tab" href="#important-notes-retiree" role="tab">Important Notes</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="faqs-retiree-tab" data-bs-toggle="tab" href="#faqs-retiree" role="tab">FAQs</a>
+                          </li>
+                      </ul>
+                  
+                      <div class="tab-content mt-3">
+                          <div class="tab-pane fade show active" id="id-docs-retiree" role="tabpanel">
+                              <textarea class="form-control" rows="4">CNIC (National ID Card) scanned colored copy
+                                  Passport-Original and all previous passports
+                                  One recent colored 2 x 2 inches photograph on a white background
+                                  FRC (Family Registration Certificate) from NADRA</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="financial-docs-retiree" role="tabpanel">
+                              <textarea class="form-control" rows="4">Solo travelers need a 6-month personal bank statement (minimum balance PKR
+                                  1,000,000) on the bank's letterhead, including bank details, and for families
+                                  (minimum PKR 2,500,000). Avoid sudden deposits.
+                                  Personal Income Tax Returns / Tax deduction certificate of last 3 years</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="supporting-docs-retiree" role="tabpanel">
+                              <textarea class="form-control" rows="4">Proof of Proprietorship / Partnership (In case the applicant is a Proprietor
+                                  / Partner in a firm)
+                                  Company Registration Certificate / Certificate of Incorporation
+                                  Chamber of Commerce Certificate if you have a membership with the Chamber of Commerce
+                                  Company Income Tax returns for the last 3 years (If filed separately)
+                                  Original Business Current Bank Account Statement for last 6 months
+                                  mentioning the Business Name and Account No. on the Bank’s letterhead with the
+                                  seal and sign of the bank officer.
+                                  Relative/s in Australia (if any)</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="important-notes-retiree" role="tabpanel">
+                              <textarea class="form-control" rows="4" placeholder="Enter Important Notes"></textarea>
+                          </div>
+                          <div class="tab-pane fade" id="faqs-retiree" role="tabpanel">
+                              <textarea class="form-control" rows="4" placeholder="Enter FAQs"></textarea>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <div>
+                      <h3>Dependent/student</h3> 
+                      <ul class="nav nav-tabs" id="requirementTabsStudent" role="tablist">
+                          <li class="nav-item">
+                              <a class="nav-link active" id="id-docs-student-tab" data-bs-toggle="tab" href="#id-docs-student" role="tab">Identification</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="financial-docs-student-tab" data-bs-toggle="tab" href="#financial-docs-student" role="tab">Financial</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="supporting-docs-student-tab" data-bs-toggle="tab" href="#supporting-docs-student" role="tab">Supporting</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="important-notes-student-tab" data-bs-toggle="tab" href="#important-notes-student" role="tab">Important Notes</a>
+                          </li>
+                          <li class="nav-item">
+                              <a class="nav-link" id="faqs-student-tab" data-bs-toggle="tab" href="#faqs-student" role="tab">FAQs</a>
+                          </li>
+                      </ul>
+                  
+                      <div class="tab-content mt-3">
+                          <div class="tab-pane fade show active" id="id-docs-student" role="tabpanel">
+                              <textarea class="form-control" rows="4">CNIC (National ID Card) scanned colored copy
+                                  Passport-Original and all previous passports
+                                  One recent colored 2 x 2 inches photograph on a white background
+                                  FRC (Family Registration Certificate) from NADRA</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="financial-docs-student" role="tabpanel">
+                              <textarea class="form-control" rows="4">Solo travelers need a 6-month personal bank statement (minimum balance PKR
+                                  1,000,000) on the bank's letterhead, including bank details, and for families
+                                  (minimum PKR 2,500,000). Avoid sudden deposits.
+                                  Personal Income Tax Returns / Tax deduction certificate of last 3 years</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="supporting-docs-student" role="tabpanel">
+                              <textarea class="form-control" rows="4">Proof of Proprietorship / Partnership (In case the applicant is a Proprietor
+                                  / Partner in a firm)
+                                  Company Registration Certificate / Certificate of Incorporation
+                                  Chamber of Commerce Certificate if you have a membership with the Chamber of Commerce
+                                  Company Income Tax returns for the last 3 years (If filed separately)
+                                  Original Business Current Bank Account Statement for last 6 months
+                                  mentioning the Business Name and Account No. on the Bank’s letterhead with the
+                                  seal and sign of the bank officer.
+                                  Relative/s in Australia (if any)</textarea>
+                          </div>
+                          <div class="tab-pane fade" id="important-notes-student" role="tabpanel">
+                              <textarea class="form-control" rows="4" placeholder="Enter Important Notes"></textarea>
+                          </div>
+                          <div class="tab-pane fade" id="faqs-student" role="tabpanel">
+                              <textarea class="form-control" rows="4" placeholder="Enter FAQs"></textarea>
+                          </div>
+                      </div>
+                  </div>
+                  
+                    <!-- Nav Tabs -->
+                  
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save Requirements</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+<!-- modal end -->
+
+              <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+          </div>
+
+          <!-- Overlay -->
+          <div class="layout-overlay layout-menu-toggle"></div>
+        </div>
+        <!-- / Layout wrapper -->
+        {% endblock %}

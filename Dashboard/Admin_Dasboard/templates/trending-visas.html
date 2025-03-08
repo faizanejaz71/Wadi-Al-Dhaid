@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+              
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="row w-100">
+                          <div class="col-12">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <div class="d-flex justify-content-between align-items-center">
+                                        <h4 class="mb-0">Add Visas</h4>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createLinksModal"><i class='bx bx-plus'></i> Add Visas</button>
+                                      </div>
+                                      <div class="modal fade" id="createLinksModal" tabindex="-1">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title">Add Visas</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <div class="modal-body">
+                                               <div class="form">
+                                                  <div class="mb-3">
+                                                      <label for="name" class="form-label">Visa country Name</label>
+                                                      <input type="text" class="form-control shadow-none" placeholder="Enter Name" id="Name">
+                                                  </div>
+                                                  <div class="mb-3">
+                                                      <label for="urls" class="form-label">Price</label>
+                                                      <input type="url" class="form-control shadow-none" placeholder="Price" id="urls">
+                                                  </div>
+                                                  <div class="mb-3 text-end">
+                                                      <button type="submit" class="btn btn-primary">Submit now</button>
+                                                  </div>
+                                               </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                      </div>
+                                      <div class="my-2 table-responsive">
+                                          <table class="table">
+                                              <thead>
+                                                  <tr>
+                                                      <th>#</th>
+                                                      <th>Country Name</th>
+                                                      <th>Price
+
+                                                      </th>
+                                                      <th>Actions</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                  <tr>
+                                                      <td>1</td>
+                                                      <td>Australia</td>
+                                                      <td>#00000$</td>
+                                                      <td>
+                                                          <a href="#" data-bs-toggle="modal" data-bs-target="#editLinksModal" class="btn btn-primary">Edit</a>
+                                                          <a href="#" class="btn btn-danger">Delete</a>
+                                                      </td>
+                                                  </tr>
+                                                  <div class="modal fade" id="editLinksModal" tabindex="-1">
+                                                      <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                          <div class="modal-header">
+                                                            <h5 class="modal-title">Edit Country</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                           <div class="form">
+                                                              <div class="mb-3">
+                                                                  <label for="name" class="form-label">Country Name</label>
+                                                                  <input type="text" class="form-control shadow-none" placeholder="Enter Name" id="Name" value="Australia">
+                                                              </div>
+                                                              <div class="mb-3">
+                                                                  <label for="urls" class="form-label">Price</label>
+                                                                  <input type="url" class="form-control shadow-none" placeholder="url e.g /visas" id="urls" value="456789$">
+                                                              </div>
+                                                              <div class="mb-3 text-end">
+                                                                  <button type="submit" class="btn btn-primary">update now</button>
+                                                              </div>
+                                                           </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                  </div>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                    </div>
+                   
+                    
+                <!-- Content wrapper -->
+              </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+{% endblock %}

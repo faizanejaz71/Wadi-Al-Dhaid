@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'Umrah',
     'Tour',
     'CarRental',
-    'Admin_Dashboard',
+    'Admin_Dasboard',
     'rest_framework',
     'rest_framework.authtoken',
 ]
@@ -125,8 +125,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'Dashboard', 'static'),
-    os.path.join(BASE_DIR, 'Admin_Dashboard', 'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 MEDIA_URL = '/media/'

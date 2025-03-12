@@ -16,7 +16,7 @@
                             data-bs-target="#addModal"><i class='bx bx-plus'></i> Add umrah details</button>
                     </div>
                     <!-- seacrch input -->
-                    <form action="{% url 'umrah-details' %}" method="GET">
+                    <form action="{% url 'tour-package-details' %}" method="GET">
                         {% csrf_token %}
                         <div class="search-person border-outline-dark col-12 bg-secondary-subtle p-1 d-flex mt-2 text-muted">
                             <div class="input-group border-outline-dark">
@@ -36,41 +36,31 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Title</th>
-                                                <th>City</th>
-                                                <th>Hotel Name</th>
-                                                <th>Address</th>
-                                                <th>Limited Time Offer</th>
-                                                <th>Offer Type</th>
+                                                <th>Package Name</th>
+                                                <th>Country Name</th>
+                                                <th>Price</th>
+                                                <th>Category</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for offer in offer_detail %}
+                                            {% for tour in tour_packages %}
                                             <tr>
-                                                <td>{{ offer.id }}</td>
-                                                <td>{{ offer.document_name }}</td>
-                                                <td>{{ offer.city }}</td>
-                                                <td>{{ offer.hotel_name }}</td>
-                                                <td>{{ offer.address }}</td>
-                                                <td>{{ offer.limited_time_offer.umrah_details.package_name }}</td> <!-- Corrected -->
-                                                <td>{{ offer.offer_type.offer_type }}</td>
-                                                <td class="d-flex flex-row gap-2">
-                                                    <!-- Add buttons or actions if needed -->
-                                                </td>
+                                                <td>{{ tour.id }}</td>
+                                                <td>{{ tour.package_name }}</td>
+                                                <td>{{ tour.country_name }}</td>
+                                                <td>{{ tour.price }}</td>
+                                                <td>{{ tour.category.category_name }}</td>
                                                 <td class="d-flex flex-row gap-2">
                                                     <div>
-                                                        <!-- Update Button -->
                                                         <button class="btn btn-warning btn-sm mx-1 edit-btn" 
-                                                            data-id="{{ offer.id }}" 
-                                                            data-category="{{ offer.offer_type.id }}" 
+                                                            data-id="{{ tour.id }}" 
+                                                            data-category="{{ tour.category.id }}" 
                                                             data-bs-toggle="modal" 
-                                                            data-bs-target="#updateModal{{ offer.id }}">
+                                                            data-bs-target="#updateModal{{ tour.id }}">
                                                             <i class="bx bx-edit-alt"></i>
                                                         </button>
-                                    
-                                                        <!-- Delete Button -->
-                                                        <a href="{% url 'delete-offer-details' offer.id %}" 
+                                                        <a href="{% url 'delete-tour-package' tour.id %}" 
                                                            class="btn btn-danger btn-sm mx-1" 
                                                            onclick="return confirm('Are you sure you want to delete this?');">
                                                             <i class="bx bx-trash"></i>
@@ -80,27 +70,27 @@
                                             </tr>
                     
                                             <!-- Update Modal -->
-                                            <div class="modal fade modal-lg" id="updateModal{{ offer.id }}" data-bs-backdrop="static"
+                                            <div class="modal fade modal-lg" id="updateModal{{ tour.id }}" data-bs-backdrop="static"
                                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="updateModalLabel">Update Offer Details</h1>
+                                                            <h1 class="modal-title fs-5" id="updateModalLabel">Update Tour Package</h1>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="card-body">
-                                                            <form action="{% url 'offer-details' %}" method="POST">
+                                                            <form action="{% url 'tour-package-details' %}" method="POST" enctype="multipart/form-data">
                                                                 {% csrf_token %}
-                                                                <input type="hidden" name="offer_id" value="{{ offer.id }}"> 
+                                                                <input type="hidden" name="tour_id" value="{{ tour.id }}"> 
                     
                                                                 <div class="row mb-3 align-items-center">
-                                                                    <label class="col-md-2 label-small fw-bold">Offer Type:</label>
+                                                                    <label class="col-md-2 label-small fw-bold">Category:</label>
                                                                     <div class="col-md-4">
-                                                                        <select class="form-select" name="offer_type">
+                                                                        <select class="form-select" name="tour_category">
                                                                             <option value="">--------</option>
-                                                                            {% for type in offer_types %}
-                                                                                <option value="{{ type.id }}" {% if type.id == offer.offer_type.id %}selected{% endif %}>
-                                                                                    {{ type.offer_type }}
+                                                                            {% for category in tour_categories %}
+                                                                                <option value="{{ category.id }}" {% if category.id == tour.category.id %}selected{% endif %}>
+                                                                                    {{ category.category_name }}
                                                                                 </option>
                                                                             {% endfor %}
                                                                         </select>
@@ -111,46 +101,42 @@
                                                                 <div class="row mb-3 align-items-center">
                                                                     <label class="col-md-2 label-small fw-bold">Package Name:</label>
                                                                     <div class="col-md-4">
-                                                                        <input type="text" class="form-control bg-white" name="document_name" value="{{ offer.document_name }}">
+                                                                        <input type="text" class="form-control bg-white" name="package_name" value="{{ tour.package_name }}">
                                                                     </div>
                                                                 </div>
                                                                 <hr>
                     
                                                                 <div class="row mb-3 align-items-center">
-                                                                    <label class="col-md-2 label-small fw-bold">City:</label>
+                                                                    <label class="col-md-2 label-small">Country Name:</label>
                                                                     <div class="col-md-4">
-                                                                        <input type="text" class="form-control bg-white" name="city" value="{{ offer.city }}">
+                                                                        <input type="text" class="form-control bg-white" name="country_name" value="{{ tour.country_name }}">
                                                                     </div>
                                                                 </div>
                                                                 <hr>
                     
                                                                 <div class="row mb-3 align-items-center">
-                                                                    <label class="col-md-2 label-small fw-bold">Hotel Name:</label>
+                                                                    <label class="col-md-2 label-small">Price:</label>
                                                                     <div class="col-md-4">
-                                                                        <input type="text" class="form-control bg-white" name="hotel_name" value="{{ offer.hotel_name }}">
+                                                                        <input type="text" class="form-control bg-white" name="price" value="{{ tour.price }}">
                                                                     </div>
                                                                 </div>
                                                                 <hr>
                     
+                                                                <!-- Image Section -->
                                                                 <div class="row mb-3 align-items-center">
-                                                                    <label class="col-md-2 label-small fw-bold">Address:</label>
+                                                                    <label class="col-md-2 label-small fw-bold">Current Image:</label>
                                                                     <div class="col-md-4">
-                                                                        <input type="text" class="form-control bg-white" name="address" value="{{ offer.address }}">
+                                                                        {% if tour.image %}
+                                                                            <img src="{{ tour.image.url }}" alt="Tour Package Image" class="img-thumbnail" width="150">
+                                                                        {% else %}
+                                                                            <p>No image available</p>
+                                                                        {% endif %}
                                                                     </div>
                                                                 </div>
-                                                                <hr>
-                    
                                                                 <div class="row mb-3 align-items-center">
-                                                                    <label class="col-md-2 label-small fw-bold">Limited Time Offer:</label>
-                                                                    <div class="col-md-4">
-                                                                        <select class="form-select" name="limited_time_offer">
-                                                                            <option value="">--------</option>
-                                                                            {% for limited in limited_time_offers %}
-                                                                                <option value="{{ limited.id }}" {% if limited.id == offer.limited_time_offer.id %}selected{% endif %}>
-                                                                                    {{ limited.umrah_details.package_name }}
-                                                                                </option>
-                                                                            {% endfor %}
-                                                                        </select>
+                                                                    <label class="col-md-2 label-small fw-bold">Upload New Image:</label>
+                                                                    <div class="col-md-8">
+                                                                        <input type="file" class="form-control" name="image">
                                                                     </div>
                                                                 </div>
                                                                 <hr>
@@ -158,7 +144,7 @@
                                                                 <div class="row mb-3 align-items-center">
                                                                     <label class="col-md-2 label-small fw-bold">Description:</label>
                                                                     <div class="col-md-10">
-                                                                        <textarea class="form-control" rows="5" name="description">{{ offer.description }}</textarea>
+                                                                        <textarea class="form-control" rows="5" name="description">{{ tour.description }}</textarea>
                                                                     </div>
                                                                 </div>
                                                                 <hr>
@@ -174,100 +160,76 @@
                                             {% endfor %}
                                         </tbody>
                                     </table>
-                                    <p class="p-2">{{ total_offer_details_num }} Offer Details</p>
+                                    <p class="p-2">{{ total_tour_packages }} Tour Packages</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     
-                    <!-- Add Offer Modal -->
-                    <div class="modal fade modal-lg" id="addModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="offerModalLabel" aria-hidden="true">
+                    <!-- Add Tour Package Modal -->
+                    <div class="modal fade modal-lg" id="addModal" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="tourPackageModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="offerModalLabel">
-                                        Add Offer Details
+                                    <h1 class="modal-title fs-5" id="tourPackageModalLabel">
                                     </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{% url 'offer-details' %}" method="POST">
+                                    <p class="mb-0 fs-5">Add Tour Package</p>
+                                    <form action="{% url 'tour-package-details' %}" method="POST" enctype="multipart/form-data">
                                         {% csrf_token %}
-
                                         <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 label-small fw-bold">Limited Time Offer:</label>
+                                            <label class="col-md-2 label-small fw-bold">Category:</label>
                                             <div class="col-md-4">
-                                                <select class="form-select" name="limited_time_offer" required>
+                                                <select class="form-select" name="category">
                                                     <option value="">--------</option>
-                                                    {% for offer in limited_time_offers %}
-                                                        <option value="{{ offer.id }}">{{ offer.umrah_details.package_name }}</option>
+                                                    {% for category in tour_categories %}
+                                                        <option value="{{ category.id }}">{{ category.category_name }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
-
                                         <hr>
-
                                         <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 label-small fw-bold">Offer Type:</label>
+                                            <label class="col-md-2 label-small fw-bold">Package Name:</label>
                                             <div class="col-md-4">
-                                                <select class="form-select" name="offer_type">
-                                                    <option value="">--------</option>
-                                                    {% for type in offer_types %}
-                                                        <option value="{{ type.id }}">{{ type.offer_type }}</option>
-                                                    {% endfor %}
-                                                </select>
+                                                <input type="text" name="package_name" class="form-control bg-white">
                                             </div>
                                         </div>
-
                                         <hr>
-
                                         <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 label-small fw-bold">Document Name:</label>
+                                            <label class="col-md-2 label-small fw-bold">Country:</label>
                                             <div class="col-md-4">
-                                                <input type="text" name="document_name" class="form-control bg-white" required>
+                                                <input type="text" name="country_name" class="form-control bg-white">
                                             </div>
                                         </div>
-
                                         <hr>
-
                                         <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 label-small">City:</label>
+                                            <label class="col-md-2 label-small fw-bold">Price:</label>
                                             <div class="col-md-4">
-                                                <input type="text" name="city" class="form-control bg-white">
+                                                <input type="text" name="price" class="form-control bg-white">
                                             </div>
                                         </div>
-
                                         <hr>
-
                                         <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 label-small">Hotel Name:</label>
-                                            <div class="col-md-4">
-                                                <input type="text" name="hotel_name" class="form-control bg-white">
-                                            </div>
-                                        </div>
-
-                                        <hr>
-
-                                        <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 label-small fw-bold">Address:</label>
+                                            <label class="col-md-2 label-small fw-bold">Image:</label>
                                             <div class="col-md-8">
-                                                <textarea name="address" class="form-control" rows="3"></textarea>
+                                                <input type="file" name="image" class="form-control">
                                             </div>
                                         </div>
-
                                         <hr>
-
                                         <div class="row mb-3 align-items-center">
                                             <label class="col-md-2 label-small fw-bold">Description:</label>
                                             <div class="col-md-10">
                                                 <textarea name="description" class="form-control" rows="5"></textarea>
                                             </div>
                                         </div>
-
+                                        
                                         <hr>
-
                                         <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
                                             <button type="submit" class="btn btn-sm btn-custom px-3">SAVE</button>
                                         </div>
@@ -275,11 +237,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
-
-                   
+                    </div>                   
                 </div>
             </div>
 

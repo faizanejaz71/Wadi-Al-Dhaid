@@ -1,89 +1,95 @@
 from django.contrib import admin
 from .models import (
-    TourCategory, TourPackage, TourLimitedOffer, TourPlace,
-    VisaRequirements, VisaDocuments, ItineraryDay,
-    TermsAndConditions, BookingForm
+    TourCategory, TourPackage, ItineraryService, ItineraryMeals, ItineraryDetail,
+    HotelService, HotelDetail, VisaRequirement, InclusionExclusion, TermsAndConditions, BookingForm
 )
 
+# Inline for Itinerary in TourPackage
+class ItineraryInline(admin.TabularInline):
+    model = ItineraryDetail
+    extra = 1  # Show one empty form by default
 
-# Tour Category Admin
-@admin.register(TourCategory)
-class TourCategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'category_name')
-    search_fields = ('category_name',)
+# Inline for Hotels in TourPackage
+class HotelInline(admin.TabularInline):
+    model = HotelDetail
+    extra = 1
 
+# Inline for Visa Requirements in TourPackage
+class VisaRequirementInline(admin.TabularInline):
+    model = VisaRequirement
+    extra = 1
+
+# Inline for Inclusion/Exclusion in TourPackage
+class InclusionExclusionInline(admin.TabularInline):
+    model = InclusionExclusion
+    extra = 1
 
 # Tour Package Admin
 @admin.register(TourPackage)
 class TourPackageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'package_name', 'country_name', 'category', 'price')
-    list_filter = ('category', 'country_name')
+    list_display = ('package_name', 'country_name', 'price', 'category')
     search_fields = ('package_name', 'country_name')
+    list_filter = ('category', 'country_name')
+    inlines = [ItineraryInline, HotelInline, VisaRequirementInline, InclusionExclusionInline]
 
+# Tour Category Admin
+@admin.register(TourCategory)
+class TourCategoryAdmin(admin.ModelAdmin):
+    list_display = ('category_name',)
+    search_fields = ('category_name',)
 
-# Inline Model for Tour Places (Inside Limited Offers)
-class TourPlaceInline(admin.TabularInline):
-    model = TourPlace
-    extra = 1
-    fields = ('place_name', 'description')
+# Itinerary Services Admin
+@admin.register(ItineraryService)
+class ItineraryServiceAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
-
-# Tour Limited Offer Admin
-@admin.register(TourLimitedOffer)
-class TourLimitedOfferAdmin(admin.ModelAdmin):
-    list_display = ('id', 'offer_type', 'tour_package')
-    list_filter = ('tour_package__package_name',)
-    search_fields = ('offer_type', 'tour_package__package_name')
-    inlines = [TourPlaceInline]
-
-
-# Tour Place Admin
-@admin.register(TourPlace)
-class TourPlaceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'place_name', 'tour_limited_offer')
-    search_fields = ('place_name',)
-
-
-# Inline Model for Visa Documents (Inside Visa Requirements)
-class VisaDocumentsInline(admin.TabularInline):
-    model = VisaDocuments
-    extra = 1
-    fields = ('document_name', 'document_description')
-
-
-# Visa Requirements Admin
-@admin.register(VisaRequirements)
-class VisaRequirementsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'person_type', 'tour_package')
-    list_filter = ('tour_package__package_name',)
-    search_fields = ('person_type', 'tour_package__package_name')
-    inlines = [VisaDocumentsInline]
-
-
-# Visa Documents Admin
-@admin.register(VisaDocuments)
-class VisaDocumentsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'document_name', 'visa_requirement')
-    search_fields = ('document_name',)
-
-
-# Itinerary Admin
-@admin.register(ItineraryDay)
-class ItineraryDayAdmin(admin.ModelAdmin):
-    list_display = ('id', 'day', 'title', 'tour_package')
-    list_filter = ('tour_package__package_name',)
+@admin.register(ItineraryMeals)
+class ItineraryMealsAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
+    
+@admin.register(ItineraryDetail)
+class ItineraryDetailAdmin(admin.ModelAdmin):
+    list_display = ('day', 'title', 'tour_package')  # Customize fields
     search_fields = ('title', 'tour_package__package_name')
+    list_filter = ('tour_package',)
 
+# Hotel Services Admin
+@admin.register(HotelService)
+class HotelServiceAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
 
-# Terms and Conditions Admin
+@admin.register(HotelDetail)
+class HotelDetailAdmin(admin.ModelAdmin):
+    list_display = ('name', 'ratings', 'address')
+    search_fields = ('name', 'address')
+    list_filter = ('ratings',)
+
+# Visa Requirement Admin
+@admin.register(VisaRequirement)
+class VisaRequirementAdmin(admin.ModelAdmin):
+    list_display = ('person_type', 'document_name', 'tour_package')
+    search_fields = ('person_type', 'document_name')
+    list_filter = ('tour_package',)
+
+# Inclusion/Exclusion Admin
+@admin.register(InclusionExclusion)
+class InclusionExclusionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'tour_package')
+    search_fields = ('name', 'tour_package__package_name')
+    list_filter = ('tour_package',)
+
+# Terms & Conditions Admin
 @admin.register(TermsAndConditions)
 class TermsAndConditionsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'tour_package')
-    search_fields = ('title', 'tour_package__package_name')
-
+    list_display = ('tour_package',)
+    search_fields = ('tour_package__package_name',)
 
 # Booking Form Admin
 @admin.register(BookingForm)
 class BookingFormAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'mobile_number', 'email', 'tour_package')
-    search_fields = ('name', 'email', 'tour_package__package_name')
+    list_display = ('name', 'tour_package', 'mobile_number', 'email')
+    search_fields = ('name', 'tour_package__package_name', 'mobile_number', 'email')
+    list_filter = ('tour_package',)

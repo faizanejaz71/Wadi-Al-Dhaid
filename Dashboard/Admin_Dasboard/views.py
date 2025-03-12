@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from Visa.models import VisaDetails, VisaCategory, PersonType, VisaRequirements, VisaDocuments
 from Umrah.models import UmrahCategory, UmrahDetails, OfferType, LimitedTimeOffer, OfferDetails
+from Tour.models import TourCategory, TourPackage, ItineraryService, ItineraryMeals, ItineraryDetail
+from django.contrib import messages
 
 # Create your views here.
 
@@ -562,34 +564,34 @@ def delete_limited_time_offer(request, offer_id):
 # Offer Details
 def offer_details(request):
     query = request.GET.get('search', '')  # Search functionality
-    total_offers = OfferDetails.objects.count()
+    total_offer_details_num = OfferDetails.objects.count()
 
     if query:
-        offers = OfferDetails.objects.filter(document_name__icontains=query)
+        offer_detail = OfferDetails.objects.filter(document_name__icontains=query)
     else:
-        offers = OfferDetails.objects.all()
+        offer_detail = OfferDetails.objects.all()
 
     offer_types = OfferType.objects.all()
-    limited_offers = LimitedTimeOffer.objects.all()
+    limited_time_offers = LimitedTimeOffer.objects.all()
     offer = None  # Initialize offer variable for update functionality
 
     if request.method == "POST":
         offer_id = request.POST.get('offer_id')  # Get offer_id for update
+        limited_offer_id = request.POST.get('limited_time_offer')
         offer_type_id = request.POST.get('offer_type')
-        limited_offer_id = request.POST.get('limited_offer')
         document_name = request.POST.get('document_name')
         city = request.POST.get('city', '')
         hotel_name = request.POST.get('hotel_name', '')
         address = request.POST.get('address', '')
         description = request.POST.get('description', '')
 
-        offer_type = get_object_or_404(OfferType, id=offer_type_id) if offer_type_id else None
         limited_offer = get_object_or_404(LimitedTimeOffer, id=limited_offer_id)
+        offer_type = get_object_or_404(OfferType, id=offer_type_id) if offer_type_id else None
 
         if offer_id:  # If offer_id exists, update existing entry
             offer = get_object_or_404(OfferDetails, id=offer_id)
-            offer.offer_type = offer_type
             offer.limited_time_offer = limited_offer
+            offer.offer_type = offer_type
             offer.document_name = document_name
             offer.city = city
             offer.hotel_name = hotel_name
@@ -598,8 +600,8 @@ def offer_details(request):
             offer.save()
         else:  # Create a new Offer entry
             offer = OfferDetails.objects.create(
-                offer_type=offer_type,
                 limited_time_offer=limited_offer,
+                offer_type=offer_type,
                 document_name=document_name,
                 city=city,
                 hotel_name=hotel_name,
@@ -610,17 +612,314 @@ def offer_details(request):
         return redirect('offer-details')
 
     context = {
-        'offers': offers,
+        'offer_detail': offer_detail,
         'offer_types': offer_types,
-        'limited_offers': limited_offers,
-        'total_offers': total_offers,
+        'limited_time_offers': limited_time_offers,
+        'total_offer_details_num': total_offer_details_num,
         'offer': offer,  # Send offer object for update
         'search_query': query,  # Pass search query to template
     }
     return render(request, 'umrah/offer-details.html', context)
 
-
 def delete_offer_details(request, offer_id):
     offer = get_object_or_404(OfferDetails, id=offer_id)
     offer.delete()
     return redirect('offer-details')
+
+
+
+
+
+
+
+# Tour Category View
+def tour_category(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_tours_num = TourCategory.objects.count()
+
+    if query:
+        tour_categories = TourCategory.objects.filter(category_name__icontains=query)  # Case-insensitive search
+    else:
+        tour_categories = TourCategory.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        tour_id = request.POST.get('tour_id')  # Check if it's an update
+        category_name = request.POST.get('category_name')
+
+        if tour_id:  # Update existing record
+            category = get_object_or_404(TourCategory, id=tour_id)
+            category.category_name = category_name
+            category.save()
+        else:  # Create new category
+            TourCategory.objects.create(category_name=category_name)
+
+        return redirect('tour-category')  # Redirect to the same page after adding/updating
+
+    context = {
+        'tour_categories': tour_categories,
+        'search_query': query,  # Pass search query to template
+        'total_tours_num': total_tours_num,
+    }
+    return render(request, 'Tour/tour-category.html', context)
+
+
+# Delete Tour Category
+def delete_tour_category(request, category_id):
+    category = get_object_or_404(TourCategory, id=category_id)
+    category.delete()
+    return redirect('tour-category')
+
+
+
+
+
+
+
+
+
+
+
+
+# Tour Package Details View
+def tour_package_details(request):
+    query = request.GET.get('search', '')  # Search functionality
+    total_tour_packages = TourPackage.objects.count()
+
+    if query:
+        tour_packages = TourPackage.objects.filter(package_name__icontains=query)
+    else:
+        tour_packages = TourPackage.objects.all()
+
+    tour_categories = TourCategory.objects.all()
+    tour = None  # Initialize tour variable for update functionality
+
+    if request.method == "POST":
+        tour_id = request.POST.get('tour_id')  # Get tour_id for update
+        category_id = request.POST.get('category')  # Fix field name
+        package_name = request.POST.get('package_name')
+        country_name = request.POST.get('country_name')
+        price = request.POST.get('price', '')
+        image = request.FILES.get('image')
+        description = request.POST.get('description', '')
+
+        # Ensure category_id is valid
+        if not category_id:
+            messages.error(request, "Please select a valid category.")
+            return redirect('tour-package-details')
+
+        category = get_object_or_404(TourCategory, id=category_id)
+
+        if tour_id:
+            tour = get_object_or_404(TourPackage, id=tour_id)
+            tour.category = category
+            tour.package_name = package_name
+            tour.country_name = country_name
+            tour.price = price
+            if image:
+                tour.image = image  # Update only if new image uploaded
+            tour.description = description
+            tour.save()
+        else:
+            TourPackage.objects.create(
+                category=category,
+                package_name=package_name,
+                country_name=country_name,
+                price=price,
+                image=image,
+                description=description
+            )
+
+        return redirect('tour-package-details')
+
+    context = {
+        'tour_packages': tour_packages,
+        'tour_categories': tour_categories,
+        'total_tour_packages': total_tour_packages,
+        'tour': tour,  # Send tour object for update
+        'search_query': query,  # Pass search query to template
+    }
+    return render(request, 'Tour/tour-package-details.html', context)
+
+
+# Delete Tour Package
+def delete_tour_package(request, tour_id):
+    tour = get_object_or_404(TourPackage, id=tour_id)
+    tour.delete()
+    return redirect('tour-package-details')
+
+
+
+
+
+
+
+
+
+
+
+# Tour Itinerary 
+
+# List and Search Itinerary Activities
+def itinerary_activity_list(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_activities_num = ItineraryService.objects.count()
+
+    if query:
+        itinerary_activities = ItineraryService.objects.filter(name__icontains=query)  # Case-insensitive search
+    else:
+        itinerary_activities = ItineraryService.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        activity_id = request.POST.get('activity_id')  # Check if it's an update
+        activity_name = request.POST.get('activity_name')
+
+        if activity_id:  # Update existing record
+            activity = get_object_or_404(ItineraryService, id=activity_id)
+            activity.name = activity_name
+            activity.save()
+        else:  # Create new activity
+            ItineraryService.objects.create(name=activity_name)
+
+        return redirect('itinerary-activity-list')  # Redirect to the same page after adding/updating
+
+    context = {
+        'itinerary_activities': itinerary_activities,
+        'search_query': query,  # Pass search query to template
+        'total_activities_num': total_activities_num,
+    }
+    return render(request, 'Tour/Itinerary/tour-itinerary-activity.html', context)
+
+
+# Delete Itinerary Activity
+def delete_itinerary_activity(request, activity_id):
+    activity = get_object_or_404(ItineraryService, id=activity_id)
+    activity.delete()
+    return redirect('itinerary-activity-list')
+
+
+
+
+
+
+
+# List and Search Itinerary meals
+def itinerary_meal_list(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_meals_num = ItineraryMeals.objects.count()
+
+    if query:
+        itinerary_meals = ItineraryMeals.objects.filter(name__icontains=query)  # Case-insensitive search
+    else:
+        itinerary_meals = ItineraryMeals.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        meal_id = request.POST.get('meal_id')  # Check if it's an update
+        meal_name = request.POST.get('meal_name')
+
+        if meal_id:  # Update existing record
+            meal = get_object_or_404(ItineraryMeals, id=meal_id)
+            meal.name = meal_name
+            meal.save()
+        else:  # Create new meal
+            ItineraryMeals.objects.create(name=meal_name)
+
+        return redirect('itinerary-meal-list')  # Redirect to the same page after adding/updating
+
+    context = {
+        'itinerary_meals': itinerary_meals,
+        'search_query': query,  # Pass search query to template
+        'total_meals_num': total_meals_num,
+    }
+    return render(request, 'Tour/Itinerary/tour-itinerary-meal.html', context)
+
+
+# Delete Itinerary meal
+def delete_itinerary_meal(request, meal_id):
+    meal = get_object_or_404(ItineraryMeals, id=meal_id)
+    meal.delete()
+    return redirect('itinerary-meal-list')  
+
+
+
+
+
+
+
+
+
+
+
+# List and Search Itinerary Details
+def itinerary_details(request):
+    query = request.GET.get('search', '')  # Search functionality
+    total_itineraries = ItineraryDetail.objects.count()
+
+    if query:
+        itineraries = ItineraryDetail.objects.filter(title__icontains=query)
+    else:
+        itineraries = ItineraryDetail.objects.all()
+
+    tour_packages = TourPackage.objects.all()
+    activities = ItineraryService.objects.all()
+    meals = ItineraryMeals.objects.all()
+    itinerary = None  # Initialize for edit functionality
+
+    if request.method == "POST":
+        itinerary_id = request.POST.get('itinerary_id')  # Get itinerary_id for update
+        tour_package_id = request.POST.get('tour_package')  # Get linked tour package
+        day = request.POST.get('day')
+        title = request.POST.get('title')
+        description = request.POST.get('description', '')
+        image = request.FILES.get('image')
+        selected_activities = request.POST.getlist('activities')  # Get multiple selected activities
+        selected_meals = request.POST.getlist('meals')  # Get multiple selected meals
+
+        # Ensure tour package is valid
+        if not tour_package_id:
+            messages.error(request, "Please select a valid tour package.")
+            return redirect('itinerary-details')
+
+        tour_package = get_object_or_404(TourPackage, id=tour_package_id)
+
+        if itinerary_id:
+            itinerary = get_object_or_404(ItineraryDetail, id=itinerary_id)
+            itinerary.tour_package = tour_package
+            itinerary.day = day
+            itinerary.title = title
+            itinerary.description = description
+            if image:
+                itinerary.image = image  # Update only if new image is uploaded
+            itinerary.save()
+            itinerary.activities.set(selected_activities)  # Update ManyToMany fields
+            itinerary.meals.set(selected_meals)
+        else:
+            itinerary = ItineraryDetail.objects.create(
+                tour_package=tour_package,
+                day=day,
+                title=title,
+                description=description,
+                image=image
+            )
+            itinerary.activities.set(selected_activities)
+            itinerary.meals.set(selected_meals)
+
+        return redirect('itinerary-details')
+
+    context = {
+        'itineraries': itineraries,
+        'tour_packages': tour_packages,
+        'activities': activities,
+        'meals': meals,
+        'total_itineraries': total_itineraries,
+        'itinerary': itinerary,  # Send itinerary object for update
+        'search_query': query,  # Pass search query to template
+    }
+    return render(request, 'Tour/Itinerary/tour-itinerary-details.html', context)
+
+
+# Delete Itinerary Detail
+def delete_itinerary(request, itinerary_id):
+    itinerary = get_object_or_404(ItineraryDetail, id=itinerary_id)
+    itinerary.delete()
+    return redirect('itinerary-details')
+

@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="row w-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 fs-5">Umrah Details</p>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addModal"><i class='bx bx-plus'></i> Add umrah details</button>
+                    </div>
+                    <!-- seacrch input -->
+                    <form action="{% url 'tour-package-details' %}" method="GET">
+                        {% csrf_token %}
+                        <div class="search-person border-outline-dark col-12 bg-secondary-subtle p-1 d-flex mt-2 text-muted">
+                            <div class="input-group border-outline-dark">
+                                <span class="input-group-text bg-white">
+                                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control bg-white" name="search" placeholder="Search detail..." value="{{ search_query }}">
+                            </div>
+                            <button type="submit" class="btn btn-white bg-white border ms-2">Search</button>
+                        </div>
+                    </form>
+                    <div class="col-12 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12 mt-3">
+                                <div>
+                                    <!-- Search Form -->
+                                    <form method="GET" class="mb-3">
+                                        <input type="text" name="search" class="form-control" placeholder="Search Itinerary..." value="{{ search_query }}">
+                                    </form>
+                                    
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Day</th>
+                                                <th>Title</th>
+                                                <th>Tour Package</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for itinerary in itineraries %}
+                                            <tr>
+                                                <td>{{ itinerary.id }}</td>
+                                                <td>{{ itinerary.day }}</td>
+                                                <td>{{ itinerary.title }}</td>
+                                                <td>{{ itinerary.tour_package.package_name }}</td>
+                                                <td class="d-flex flex-row gap-2">
+                                                    <button class="btn btn-warning btn-sm edit-btn" data-id="{{ itinerary.id }}" data-bs-toggle="modal" data-bs-target="#updateModal{{ itinerary.id }}">
+                                                        <i class="bx bx-edit-alt"></i>
+                                                    </button>
+                                                    <a href="{% url 'delete-itinerary' itinerary.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">
+                                                        <i class="bx bx-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                    
+                                            <!-- Update Modal -->
+                                            <div class="modal fade modal-lg" id="updateModal{{ itinerary.id }}" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Update Itinerary</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST" enctype="multipart/form-data">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="itinerary_id" value="{{ itinerary.id }}"> 
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Tour Package:</label>
+                                                                    <select class="form-select" name="tour_package">
+                                                                        {% for package in tour_packages %}
+                                                                            <option value="{{ package.id }}" {% if package.id == itinerary.tour_package.id %}selected{% endif %}>{{ package.package_name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Day:</label>
+                                                                    <input type="text" class="form-control" name="day" value="{{ itinerary.day }}">
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Title:</label>
+                                                                    <input type="text" class="form-control" name="title" value="{{ itinerary.title }}">
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Description:</label>
+                                                                    <textarea class="form-control" name="description">{{ itinerary.description }}</textarea>
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Activities:</label>
+                                                                    <select class="form-select" name="activities" multiple>
+                                                                        {% for activity in activities %}
+                                                                            <option value="{{ activity.id }}" {% if activity in itinerary.activities.all %}selected{% endif %}>{{ activity.name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Meals:</label>
+                                                                    <select class="form-select" name="meals" multiple>
+                                                                        {% for meal in meals %}
+                                                                            <option value="{{ meal.id }}" {% if meal in itinerary.meals.all %}selected{% endif %}>{{ meal.name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Image:</label>
+                                                                    {% if itinerary.image %}
+                                                                        <img src="{{ itinerary.image.url }}" class="img-thumbnail" width="150">
+                                                                    {% else %}
+                                                                        <p>No image available</p>
+                                                                    {% endif %}
+                                                                    <input type="file" class="form-control" name="image">
+                                                                </div>
+                    
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <p class="p-2">{{ total_itineraries }} Itineraries</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                      
+                        <!-- Add Itinerary Detail Modal -->
+                        <div class="modal fade modal-lg" id="addModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="itineraryModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="itineraryModalLabel">Add Itinerary Detail</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="{% url 'itinerary-details' %}" method="POST" enctype="multipart/form-data">
+                                            {% csrf_token %}
+
+                                            <!-- Select Tour Package -->
+                                            <div class="row mb-3 align-items-center">
+                                                <label class="col-md-2 label-small fw-bold">Tour Package:</label>
+                                                <div class="col-md-4">
+                                                    <select class="form-select" name="tour_package">
+                                                        <option value="">--------</option>
+                                                        {% for package in tour_packages %}
+                                                            <option value="{{ package.id }}">{{ package.package_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!-- Day Number -->
+                                            <div class="row mb-3 align-items-center">
+                                                <label class="col-md-2 label-small fw-bold">Day:</label>
+                                                <div class="col-md-4">
+                                                    <input type="number" name="day" class="form-control bg-white">
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!-- Itinerary Title -->
+                                            <div class="row mb-3 align-items-center">
+                                                <label class="col-md-2 label-small fw-bold">Title:</label>
+                                                <div class="col-md-4">
+                                                    <input type="text" name="title" class="form-control bg-white">
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!-- Description -->
+                                            <div class="row mb-3 align-items-center">
+                                                <label class="col-md-2 label-small fw-bold">Description:</label>
+                                                <div class="col-md-10">
+                                                    <textarea name="description" class="form-control" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!-- Activities -->
+                                            <div class="row mb-3 align-items-center">
+                                                <label class="col-md-2 label-small fw-bold">Activities:</label>
+                                                <div class="col-md-10">
+                                                    <select class="form-select" name="activities" multiple>
+                                                        {% for activity in activities %}
+                                                            <option value="{{ activity.id }}">{{ activity.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!-- Meals -->
+                                            <div class="row mb-3 align-items-center">
+                                                <label class="col-md-2 label-small fw-bold">Meals:</label>
+                                                <div class="col-md-10">
+                                                    <select class="form-select" name="meals" multiple>
+                                                        {% for meal in meals %}
+                                                            <option value="{{ meal.id }}">{{ meal.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!-- Image Upload -->
+                                            <div class="row mb-3 align-items-center">
+                                                <label class="col-md-2 label-small fw-bold">Image:</label>
+                                                <div class="col-md-8">
+                                                    <input type="file" name="image" class="form-control">
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <!-- Save Button -->
+                                            <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                                <button type="submit" class="btn btn-sm btn-custom px-3">SAVE</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>              
+                </div>
+            </div>
+
+            <!-- modal end -->
+
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+{% endblock %}

@@ -84,7 +84,43 @@ urlpatterns = [
 
 
     # Offer Details
-    path('offers/', views.offer_details, name='offer-details'),
-    path('offers/delete/<int:offer_id>/', views.delete_offer_details, name='delete-offer'),
+    path('offer-details/', views.offer_details, name='offer-details'),
+    path('offer-details/delete/<int:offer_id>/', views.delete_offer_details, name='delete-offer-details'),
+
+
+
+    # Tour Category
+    path('tour-category/', views.tour_category, name='tour-category'),
+    path('tour-category/delete/<int:category_id>/', views.delete_tour_category, name='delete-tour-category'),
+
+
+
+    # Tour Package Details
+    path('tour-packages/', views.tour_package_details, name='tour-package-details'),
+    path('tour-packages/delete/<int:tour_id>/', views.delete_tour_package, name='delete-tour-package'),
+
+
+
+
+    # Itinerary Activities
+    path('itinerary-activities/', views.itinerary_activity_list, name='itinerary-activity-list'),
+    path('itinerary-activities/delete/<int:activity_id>/', views.delete_itinerary_activity, name='delete-itinerary-activity'),
+
+
+
+
+
+
+    # Itinerary Meals
+    path('itinerary-meals/', views.itinerary_meal_list, name='itinerary-meal-list'),
+    path('itinerary-meals/delete/<int:activity_id>/', views.delete_itinerary_meal, name='delete-itinerary-meal'),
+
+
+    
+
+    # Itinerary Details
+    path('itinerary-details/', views.itinerary_details, name='itinerary-details'),
+    path('delete-itinerary/<int:itinerary_id>/', views.delete_itinerary, name='delete-itinerary'),
 
 ]
+

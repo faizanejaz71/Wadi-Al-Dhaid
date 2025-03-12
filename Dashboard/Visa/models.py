@@ -26,7 +26,7 @@ class VisaDetails(models.Model):
         return f"{self.country_name} ({self.visa_category.visa_category})"
 # Person_type
 class PersonType(models.Model):
-    visa_details = models.ForeignKey(VisaDetails, on_delete=models.CASCADE)
+    # visa_details = models.ForeignKey(VisaDetails, on_delete=models.CASCADE)
     person_type = models.CharField(max_length=100)
 
     def __str__(self):

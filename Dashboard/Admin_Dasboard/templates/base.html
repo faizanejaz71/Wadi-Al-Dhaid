@@ -51,7 +51,7 @@
           <div class="app-brand demo">
             <a href="{% url 'home' %}" class="app-brand-link">
               <div class="image-style">
-                <img src="{% static 'assets/img/2.png' %}" class="img-fluid" width="120" alt="">
+                <img src="{% static 'assets/img/Logo.png' %}" class="img-fluid" width="80" alt="">
               </div>
             </a>
 
@@ -85,17 +85,17 @@
                 <span class="badge rounded-pill bg-danger ms-auto">5</span>
               </a>
               <ul class="menu-sub">
-                <li class="menu-item">
+                {% comment %} <li class="menu-item">
                   <a href="#" class="menu-link">
                     list
                   </a>
-                </li>
-                <li class="menu-item">
+                </li> {% endcomment %}
+                {% comment %} <li class="menu-item">
                   <a href="{% url 'visa-status' %}" class="menu-link">
                     Status
                     <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">2</div>
                   </a>
-                </li>
+                </li> {% endcomment %}
                 <li class="menu-item">
                   <a href="{% url 'person-type' %}" class="menu-link">
                     Person type
@@ -103,7 +103,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{% url 'category-type' %}" class="menu-link">
+                  <a href="{% url 'visa-category' %}" class="menu-link">
                     visa category
                     <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">2</div>
                   </a>
@@ -115,13 +115,13 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{% url 'visa-document' %}" class="menu-link">
+                  <a href="{% url 'visa-documents' %}" class="menu-link">
                     visa document
                     <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">2</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{% url 'visa-requirement' %}" class="menu-link">
+                  <a href="{% url 'visa-requirements' %}" class="menu-link">
                     visa requirement
                     <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">2</div>
                   </a>
@@ -157,13 +157,31 @@
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'umrah' %}" class="menu-link">
-                    <div class="text-truncate" data-i18n="Analytics">list</div>
+                  <a href="{% url 'umrah-category' %}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Analytics">Umrah Category</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{% url 'umrah-status' %}" class="menu-link">
-                    <div class="text-truncate" data-i18n="CRM">Status</div>
+                  <a href="{% url 'umrah-details' %}" class="menu-link">
+                    <div class="text-truncate" data-i18n="CRM">Umrah Details</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">33</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'offer-type' %}" class="menu-link">
+                    <div class="text-truncate" data-i18n="CRM">Offer Type</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">33</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'limited-time-offers' %}" class="menu-link">
+                    <div class="text-truncate" data-i18n="CRM">Limited Time Offer</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">33</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'offer-details' %}" class="menu-link">
+                    <div class="text-truncate" data-i18n="CRM">Offer Details</div>
                     <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">33</div>
                   </a>
                 </li>

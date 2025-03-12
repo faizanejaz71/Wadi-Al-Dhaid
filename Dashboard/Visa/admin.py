@@ -18,8 +18,7 @@ class VisaDetailsAdmin(admin.ModelAdmin):
 # Person Type Admin
 @admin.register(PersonType)
 class PersonTypeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'visa_details', 'person_type')
-    list_filter = ('visa_details',)
+    list_display = ('id', 'person_type')  # Visa_details hata diya
     search_fields = ('person_type',)
 
 # Visa Requirements Admin

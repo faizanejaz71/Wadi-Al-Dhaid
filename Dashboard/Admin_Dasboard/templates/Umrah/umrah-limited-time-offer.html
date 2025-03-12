@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row w-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 fs-5">Select visa requirements to change</p>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop"><i class='bx bx-plus'></i> Add visa requirements</button>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Umrah Details</th>
+                                    <th>Offer Type</th>
+                                    <th>Actions</th>        
+                                </tr>
+                            </thead>        
+                            <tbody>
+                                {% for offer in offers %}
+                                <tr>
+                                    <td>{{ offer.id }}</td>
+                                    <td>{{ offer.umrah_details.package_name }}</td>
+                                    <td>{{ offer.offer_type }}</td>
+                                    <td class="d-flex flex-row gap-2">
+                                        <div>
+                                            <button class="btn btn-warning btn-sm mx-1" data-bs-toggle="modal"
+                                                data-bs-target="#updateModal{{ offer.id }}">
+                                                <i class="bx bx-edit-alt"></i>
+                                            </button>
+                    
+                                            <a href="{% url 'delete-limited-time-offer' offer.id %}" 
+                                               class="btn btn-danger btn-sm mx-1" 
+                                               onclick="return confirm('Are you sure you want to delete this?');">
+                                                <i class="bx bx-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>         
+                                </tr> 
+                    
+                                <!-- Update Modal -->
+                                <div class="modal fade modal-lg" id="updateModal{{ offer.id }}" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel{{ offer.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="updateModalLabel{{ offer.id }}">
+                                                    Update Limited Time Offer
+                                                </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-2 fs-5">Edit Limited Time Offer</p>
+                                                <form method="POST" action="{% url 'limited-time-offers' %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="offer_id" value="{{ offer.id }}">
+                    
+                                                    <div class="row mb-3">
+                                                        <label class="col-md-2 fw-bold">Umrah Package:</label>
+                                                        <div class="col-md-4">
+                                                            <select class="form-select" name="umrah_details">
+                                                                {% for umrah in umrah_details %}
+                                                                <option value="{{ umrah.id }}" {% if umrah.id == offer.umrah_details.id %} selected {% endif %}>
+                                                                    {{ umrah.package_name }}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row mb-3">
+                                                        <label class="col-md-2 fw-bold">Offer Type:</label>
+                                                        <div class="col-md-4">
+                                                            <select class="form-select" name="offer_type">
+                                                                {% for offer_type in offer_types %}
+                                                                    <option value="{{ offer_type.id }}" {% if offer_type.id == offer.offer_type.id %} selected {% endif %}>
+                                                                        {{ offer_type.offer_type }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="d-flex p-2 mt-3 w-75 border rounded">
+                                                        <button type="submit" class="btn btn-sm btn-custom px-3">UPDATE</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Add Modal -->
+                    <div class="modal fade modal-lg" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Limited Time Offer</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-2 fs-5">Add Limited Time Offer</p>
+                                <form action="{% url 'limited-time-offers' %}" method="POST">
+                                    {% csrf_token %}
+
+                                    <div class="row mb-3">
+                                        <label class="col-md-2 fw-bold">Umrah Package:</label>
+                                        <div class="col-md-4">
+                                            <select class="form-select" name="umrah_details" required>
+                                                <option value="">--------</option>
+                                                {% for umrah in umrah_details %}
+                                                    <option value="{{ umrah.id }}">{{ umrah.package_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <div class="row mb-3">
+                                        <label class="col-md-2 fw-bold">Offer Type:</label>
+                                        <div class="col-md-4">
+                                            <select class="form-select" name="offer_type" required>
+                                                <option value="">--------</option>
+                                                {% for offer in offer_types %}
+                                                    <option value="{{ offer.id }}">{{ offer.offer_type }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                        <button type="submit" class="btn btn-custom px-3">SAVE</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

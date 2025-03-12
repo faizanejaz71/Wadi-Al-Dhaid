@@ -1,161 +1,147 @@
 {% extends "base.html" %}
 {% load static %}
 {% block body %}
-<!-- Content wrapper -->
 <div class="content-wrapper">
-    <!-- Content -->
-
     <div class="container-xxl flex-grow-1 container-p-y">
-
         <div class="row w-100">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="mb-0 fs-5">Select visa requirements to change</p>
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop"><i class='bx bx-plus'></i>Add visa requirements</button>
+                            data-bs-target="#staticBackdrop"><i class='bx bx-plus'></i> Add visa requirements</button>
                     </div>
-                    <!-- seacrch input -->
+
                     <div class="col-12 mt-3">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div
-                                    class="search-person border-outline-dark bg-secondary-subtle p-1 d-flex mt-2 text-muted">
-                                    <form action="">
-                                        <div class="input-group  border-outline-dark">
-                                            <span class="input-group-text bg-white "><i
-                                                    class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                                            <input type="text" class="form-control bg-white">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Visa Details</th>
+                                    <th>Person Type</th>
+                                    <th>Actions</th>        
+                                </tr>
+                            </thead>        
+                            <tbody>
+                                {% for requirement in visa_reqs %}
+                                <tr>
+                                    <td>{{ requirement.id }}</td>
+                                    <td>{{ requirement.visa_details.country_name }}</td>
+                                    <td>{{ requirement.person_type }}</td>
+                                    <td class="d-flex flex-row gap-2">
+                                        <div>
+                                            <button class="btn btn-warning btn-sm mx-1" data-bs-toggle="modal"
+                                                data-bs-target="#updateModal{{ requirement.id }}">
+                                                <i class="bx bx-edit-alt"></i>
+                                            </button>
 
+                                            <a href="{% url 'delete-visa-requirement' requirement.id %}" 
+                                               class="btn btn-danger btn-sm mx-1" 
+                                               onclick="return confirm('Are you sure you want to delete this?');">
+                                                <i class="bx bx-trash"></i>
+                                            </a>
                                         </div>
-                                    </form>
-                                    <button class="btn btn-white bg-white border ms-2">Search</button>
-                                </div>
-                                <div>
-                                    <div class="d-flex align-items-center py-3 personselect">
-                                        <label class="me-2">Action:</label>
-                                        <select class="form-select w-25 me-2">
-                                            <option>--------</option>
-                                            <option>Option 1</option>
-                                            <option>Option 2</option>
-                                        </select>
-                                        <button class="btn btn-sm bg-secondary-subtle border">Go</button>
-                                        <span class="ms-2">0 of 1 selected</span>
-                                    </div>
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th><input type="checkbox"></th>
-                                                <th>ID</th>
-                                                <th class="text-uppercase">visa details</th>
-                                                <th class="text-uppercase">person type</th>
-                                            </tr>
-                                        </thead>
+                                    </td>         
+                                </tr> 
 
-                                        <tbody>
-                                            <tr>
-                                                <td><input type="checkbox"></td>
-                                                <td>1</td>
-                                                <td> UAE (E-Visa)</td>
-                                                <td> Business Owner</td>
-                                            </tr>
+                                <!-- Update Modal -->
+                                <div class="modal fade modal-lg" id="updateModal{{ requirement.id }}" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel{{ requirement.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="updateModalLabel{{ requirement.id }}">
+                                                    Update Visa Requirement
+                                                </h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-2 fs-5">Edit visa requirement</p>
+                                                <form method="POST" action="{% url 'visa-requirements' %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="req_id" value="{{ requirement.id }}">
 
-
-
-                                            <!-- Modal -->
-
-                                            <!-- modal end -->
-                                            <!-- <td class="d-flex flex-row gap-2">
-                            <a href="#" class="btn btn-success">Edit</a>
-                            <a href="#" class="btn btn-danger">Delete</a>
-                          </td> -->
-                                        </tbody>
-
-                                    </table>
-                                    <p class="p-2">1 visa requirements</p>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="filter-box">
-                                    <div class="filter-header">FILTER</div>
-                                    <div class="filter-body">
-                                        <p class="d-flex gap-2"><i class="fa fa-eye mt-1"></i> <a href="#"
-                                                class="filter-link text-decoration-none">Show counts</a></p>
-
-                                        <p class="filter-item">↓ By Person Type</p>
-                                        <a href="#" class="filter-link text-decoration-none">All</a>
-                                        <a href="#" class="filter-link text-decoration-none">Business owner</a>
-                                        <a href="#" class="filter-link text-decoration-none">Retired person</a>
-
-
+                                                    <div class="row mb-3">
+                                                        <label class="col-md-2 fw-bold">Visa Details:</label>
+                                                        <div class="col-md-4">
+                                                            <select class="form-select" name="visa_details">
+                                                                {% for visa in visa_details %}
+                                                                <option value="{{ visa.id }}" {% if visa.id == requirement.visa_details.id %} selected {% endif %}>
+                                                                    {{ visa.country_name }}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row mb-3">
+                                                        <label class="col-md-2 fw-bold">Person Type:</label>
+                                                        <div class="col-md-4">
+                                                            <select class="form-select" name="person_type">
+                                                                {% for person in person_types %}
+                                                                    <option value="{{ person.id }}" {% if person.id == requirement.person_type.id %} selected {% endif %}>
+                                                                        {{ person.person_type }}
+                                                                    </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="d-flex p-2 mt-3 w-75 border rounded">
+                                                        <button type="submit" class="btn btn-sm btn-custom px-3">UPDATE</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                            </div>
-                        </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- Modal -->
+                    <!-- Add Modal -->
                     <div class="modal fade modal-lg" id="staticBackdrop" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                                    </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Visa Requirement</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="card-body">
-                                    <p class="mb-0 fs-5">Add visa requirements</p>
-                                    <form action="">
-                                        
-                                        <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 col-sm-2 col-2 label-small fw-bold ">Visa
-                                                details:</label>
-                                            <div class="col-md-4 col-sm-4 col-4">
-                                                <select class="form-select  ">
-                                                    <option>--------</option>
-                                                    <option>Option 1</option>
-                                                    <option>Option 2</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <i class="fa-solid fa-pen text-light"></i>
-                                                <i class="fa-solid fa-plus text-success fs-5"></i>
-                                                <i class="fa-solid fa-eye"></i>
-                                            </div>
-                                            <div class="col-md-4"></div>
-                                        </div>
-                                        <hr>
-                                        <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 label-small  ">Person type:</label>
-                                            <div class="col-md-4 ">
-                                                <select class="form-select  ">
-                                                    <option>--------</option>
-                                                    <option>Business owner</option>
-                                                    <option>Retired person</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <i class="fa-solid fa-pen text-light"></i>
-                                                <i class="fa-solid fa-plus text-success fs-5"></i>
-                                                <i class="fa-solid fa-eye"></i>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="row mb-3 align-items-center">
-                                            <label class="col-md-2 label-small  ">Document Name:</label>
+                                    <p class="mb-2 fs-5">Add Visa Requirements</p>
+                                    <form action="{% url 'visa-requirements' %}" method="POST">
+                                        {% csrf_token %}
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 fw-bold">Visa Details:</label>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control bg-white">
+                                                <select class="form-select" name="visa_details" required>
+                                                    <option value="">--------</option>
+                                                    {% for visa in visa_details %}
+                                                        <option value="{{ visa.id }}">{{ visa.country_name }}</option>
+                                                    {% endfor %}
+                                                </select>
                                             </div>
                                         </div>
                                         <hr>
-                                        <div class=" person-btn d-flex p-2 mt-3 w-75  border rounded">
-                                            <button class="btn btn-sm btn-custom px-3">SAVE</button>
-                                            <button class="btn btn-sm btn-custom ms-2 px-3">Save and add
-                                                another</button>
-                                            <button class="btn btn-sm btn-custom ms-2 px-3">Save and continue
-                                                editing</button>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 fw-bold">Person Type:</label>
+                                            <div class="col-md-4">
+                                                <select class="form-select" name="person_type" required>
+                                                    <option value="">--------</option>
+                                                    {% for person in person_types %}
+                                                        <option value="{{ person.id }}">{{ person.person_type }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                            <button type="submit" class="btn btn-custom px-3">SAVE</button>
                                         </div>
                                     </form>
                                 </div>
@@ -165,15 +151,7 @@
 
                 </div>
             </div>
-
-            <!-- modal end -->
-
-            <!-- Content wrapper -->
         </div>
-        <!-- / Layout page -->
     </div>
-
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 {% endblock %}

@@ -26,14 +26,65 @@ urlpatterns = [
     path('visa-status/', views.VisaStatus, name='visa-status'),
     # path('visas/', views.Visas, name='visas'),
 
-
+# visa_person_type
     path('person-type/', views.Person_type, name='person-type'),
-    path('category-type/', views.category_type, name='category-type'),
+    path('delete-person-type/<int:person_id>/', views.delete_person_type, name='delete-person'),
+
+
+# visa_category
+    path('visa-category/', views.visa_category, name='visa-category'),
     path('delete-category/<int:category_id>/', views.delete_category, name='delete-category'),
-
-
     
+
+    # Visa_details
     path('visa-details/', views.visa_details, name='visa-details'),
-    path('visa-document/', views.visa_document, name='visa-document'),
-    path('visa-requirement/', views.visa_requirement, name='visa-requirement'),
+    path('delete-visa-details/<int:visa_id>/', views.delete_visa_details, name='delete-visa-details'),
+
+
+    # Visa Requirements
+    path('visa-requirements/', views.visa_requirements, name='visa-requirements'),
+    path('delete-visa-requirement/<int:req_id>/', views.delete_visa_requirement, name='delete-visa-requirement'),
+
+
+
+
+    # Visa Documents
+    path('visa-documents/',views.visa_documents, name='visa-documents'),  # List, Search, Create, Update
+    path('visa-documents/delete/<int:doc_id>/', views.delete_visa_document, name='delete-visa-document'),  # Delete
+
+
+
+
+
+
+    # Umrah Category
+    path('umrah-category/', views.umrah_category, name='umrah-category'),
+    path('delete-umrah-category/<int:category_id>/', views.delete_umrah_category, name='delete-umrah-category'),
+
+
+
+
+    #Umrah Details
+    path('umrah-details/', views.umrah_details, name='umrah-details'),
+    path('delete-umrah/<int:umrah_id>/', views.delete_umrah_details, name='delete-umrah'),
+
+
+
+    # Offer type
+    path('offer-type/', views.offer_type, name='offer-type'),
+    path('delete-offer-type/<int:offer_id>/', views.delete_offer_type, name='delete-offer-type'),
+
+
+
+
+    #Limited Time offer
+    path('limited-time-offers/', views.limited_time_offers, name='limited-time-offers'),
+    path('delete-limited-time-offer/<int:offer_id>/', views.delete_limited_time_offer, name='delete-limited-time-offer'),
+
+
+
+    # Offer Details
+    path('offers/', views.offer_details, name='offer-details'),
+    path('offers/delete/<int:offer_id>/', views.delete_offer_details, name='delete-offer'),
+
 ]

@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="row w-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 fs-5">Umrah Details</p>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addModal"><i class='bx bx-plus'></i> Add umrah details</button>
+                    </div>
+                    <!-- seacrch input -->
+                    <form action="{% url 'umrah-details' %}" method="GET">
+                        {% csrf_token %}
+                        <div class="search-person border-outline-dark col-12 bg-secondary-subtle p-1 d-flex mt-2 text-muted">
+                            <div class="input-group border-outline-dark">
+                                <span class="input-group-text bg-white">
+                                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control bg-white" name="search" placeholder="Search detail..." value="{{ search_query }}">
+                            </div>
+                            <button type="submit" class="btn btn-white bg-white border ms-2">Search</button>
+                        </div>
+                    </form>
+                    <div class="col-12 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12 mt-3">
+                                <div>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Umrah Category</th>
+                                                <th>Package Name</th>
+                                                <th>Adult Price</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for umrah in umrah_detail %}
+                                            <tr>
+                                                <td>{{ umrah.id }}</td>
+                                                <td>{{ umrah.umrah_category }}</td>
+                                                <td>{{ umrah.package_name }}</td>
+                                                <td>{{ umrah.adult_price }}</td>
+                                                <td class="d-flex flex-row gap-2">
+                                                    <div>
+                                                        <!-- Update Button -->
+                                                        <button class="btn btn-warning btn-sm mx-1 edit-btn" 
+                                                            data-id="{{ umrah.id }}" 
+                                                            data-category="{{ umrah.umrah_category }}" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#updateModal{{ umrah.id }}">
+                                                            <i class="bx bx-edit-alt"></i>
+                                                        </button>
+                                        
+                                                        <!-- Delete Button -->
+                                                        <a href="{% url 'delete-umrah' umrah.id %}" 
+                                                           class="btn btn-danger btn-sm mx-1" 
+                                                           onclick="return confirm('Are you sure you want to delete this?');">
+                                                            <i class="bx bx-trash"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        
+                                            <!-- Update Modal -->
+                                            <div class="modal fade modal-lg" id="updateModal{{ umrah.id }}" data-bs-backdrop="static"
+                                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="updateModalLabel">Update Umrah Details</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <form action="{% url 'offer-details' %}" method="POST" enctype="multipart/form-data">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="offer_id" value="{{ umrah.id }}"> 
+                                        
+                                                                <div class="row mb-3 align-items-center">
+                                                                    <label class="col-md-2 label-small fw-bold">Umrah Category:</label>
+                                                                    <div class="col-md-4">
+                                                                        <select class="form-select" name="offer_type">
+                                                                            <option value="">--------</option>
+                                                                            {% for category in umrah_category %}
+                                                                                <option value="{{ category.id }}" {% if category.id == umrah.umrah_category.id %}selected{% endif %}>
+                                                                                    {{ category.umrah_category }}
+                                                                                </option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>    
+                                        
+                                                                <div class="row mb-3 align-items-center">
+                                                                    <label class="col-md-2 label-small fw-bold">Package Name:</label>
+                                                                    <div class="col-md-4">
+                                                                        <input type="text" class="form-control bg-white" name="document_name" value="{{ umrah.package_name }}">
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                        
+                                                                <div class="row mb-3 align-items-center">
+                                                                    <label class="col-md-2 label-small">Adult Price:</label>
+                                                                    <div class="col-md-4">
+                                                                        <input type="text" class="form-control bg-white" name="adult_price" value="{{ umrah.adult_price }}">
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                        
+                                                                <div class="row mb-3 align-items-center">
+                                                                    <label class="col-md-2 label-small">Child Price:</label>
+                                                                    <div class="col-md-4">
+                                                                        <input type="text" class="form-control bg-white" name="child_price" value="{{ umrah.child_price }}">
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                        
+                                                                <!-- Image Section -->
+                                                                <div class="row mb-3 align-items-center">
+                                                                    <label class="col-md-2 label-small fw-bold">Current Image:</label>
+                                                                    <div class="col-md-4">
+                                                                        {% if umrah.image %}
+                                                                            <img src="{{ umrah.image.url }}" alt="Umrah Package Image" class="img-thumbnail" width="150">
+                                                                        {% else %}
+                                                                            <p>No image available</p>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row mb-3 align-items-center">
+                                                                    <label class="col-md-2 label-small fw-bold">Upload New Image:</label>
+                                                                    <div class="col-md-8">
+                                                                        <input type="file" class="form-control" name="image">
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                        
+                                                                <div class="row mb-3 align-items-center">
+                                                                    <label class="col-md-2 label-small fw-bold">Description:</label>
+                                                                    <div class="col-md-10">
+                                                                        <textarea class="form-control" rows="5" name="description">{{ umrah.description }}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                        
+                                                                <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                                                    <button type="submit" class="btn btn-sm btn-custom px-3">UPDATE</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </tbody>
+                                        
+                                    </table>
+                                    <p class="p-2">{{ total_umrah_details_num }} Umrah Details</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Add Offer Modal -->
+                    <div class="modal fade modal-lg" id="addOfferModal" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="offerModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="offerModalLabel">
+                                        Add Offer Details
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="card-body">
+                                    <form action="{% url 'offer-details' %}" method="POST">
+                                        {% csrf_token %}
+                                        
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-2 label-small fw-bold">Limited Time Offer:</label>
+                                            <div class="col-md-4">
+                                                <select class="form-select" name="limited_time_offer">
+                                                    <option value="">--------</option>
+                                                    {% for offer in limited_time_offers %}
+                                                        <option value="{{ offer.id }}">{{ offer.umrah_details.package_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-2 label-small fw-bold">Offer Type:</label>
+                                            <div class="col-md-4">
+                                                <select class="form-select" name="offer_type">
+                                                    <option value="">--------</option>
+                                                    {% for type in offer_types %}
+                                                        <option value="{{ type.id }}">{{ type.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-2 label-small fw-bold">Document Name:</label>
+                                            <div class="col-md-4">
+                                                <input type="text" name="document_name" class="form-control bg-white">
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-2 label-small">City:</label>
+                                            <div class="col-md-4">
+                                                <input type="text" name="city" class="form-control bg-white">
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-2 label-small">Hotel Name:</label>
+                                            <div class="col-md-4">
+                                                <input type="text" name="hotel_name" class="form-control bg-white">
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-2 label-small fw-bold">Address:</label>
+                                            <div class="col-md-8">
+                                                <textarea name="address" class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-2 label-small fw-bold">Description:</label>
+                                            <div class="col-md-10">
+                                                <textarea name="description" class="form-control" rows="5"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+                                        
+                                        <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                            <button type="submit" class="btn btn-sm btn-custom px-3">SAVE</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                   
+                </div>
+            </div>
+
+            <!-- modal end -->
+
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+{% endblock %}

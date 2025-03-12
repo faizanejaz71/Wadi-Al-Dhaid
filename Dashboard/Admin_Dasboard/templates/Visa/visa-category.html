@@ -11,12 +11,12 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
-                        <p class="mb-0 fs-5">Select visa category to change </p>
+                        <p class="mb-0 fs-5">Visa Categories</p>
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop"><i class='bx bx-plus'></i> Add visa category</button>
                     </div>
                     <!-- seacrch input -->
-                    <form action="{% url 'category-type' %}" method="GET">
+                    <form action="{% url 'visa-category' %}" method="GET">
                         <div class="search-person border-outline-dark col-12 bg-secondary-subtle p-1 d-flex mt-2 text-muted">
                             <div class="input-group border-outline-dark">
                                 <span class="input-group-text bg-white">
@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="card-body">
                                     <p class="mb-0 fs-5">Add visa category</p>
-                                    <form action="{% url 'category-type' %}" method="POST">
+                                    <form action="{% url 'visa-category' %}" method="POST">
                                         {% csrf_token %}
                                         <div class="d-flex mt-3">
                                             <label class="me-2 mt-2">Visa Category:</label>
@@ -59,10 +59,9 @@
                         </div>
                     </div>
                     <div>
-                        <table class="table">
+                        <table class="table mt-3">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox"></th>
                                     <th>ID</th>
                                     <th>VISA DETAILS</th>
                                     <th>Actions</th>
@@ -71,7 +70,6 @@
                             <tbody>
                                 {% for category in visa_categories %}
                                 <tr>
-                                    <td><input type="checkbox"></td>
                                     <td>{{ category.id }}</td>
                                     <td>{{ category.visa_category }}</td>
                                     <td>
@@ -102,7 +100,7 @@
                                                 </div>
                                                 <div class="card-body">
                                                     <p class="mb-0 fs-5">Add visa category</p>
-                                                    <form id="visaForm" action="{% url 'category-type' %}" method="POST">
+                                                    <form id="visaForm" action="{% url 'visa-category' %}" method="POST">
                                                         {% csrf_token %}
                                                         <input type="hidden" id="visa_id" name="visa_id" value="{{ category.id }}"> <!-- Hidden input for edit -->
                                                         <div class="d-flex mt-3">

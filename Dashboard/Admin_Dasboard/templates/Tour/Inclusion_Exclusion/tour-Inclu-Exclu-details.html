@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="row w-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 fs-5">Visa Requirements</p>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addInclusionExclusionModal"><i class='bx bx-plus'></i> Add Visa details</button>
+                    </div>
+                    <!-- seacrch input -->
+                    <form action="{% url 'visa-requirements' %}" method="GET">
+                        {% csrf_token %}
+                        <div class="search-person border-outline-dark col-12 bg-secondary-subtle p-1 d-flex mt-2 text-muted">
+                            <div class="input-group border-outline-dark">
+                                <span class="input-group-text bg-white">
+                                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control bg-white" name="search" placeholder="Search detail..." value="{{ search_query }}">
+                            </div>
+                            <button type="submit" class="btn btn-white bg-white border ms-2">Search</button>
+                        </div>
+                    </form>
+                    <div class="col-12 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12 mt-3">
+                                <div>
+                                    <!-- Search Form -->
+                                    <form method="GET" class="mb-3">
+                                        <input type="text" name="search" class="form-control" placeholder="Search Inclusion/Exclusion..." value="{{ search_query }}">
+                                    </form>
+                    
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Tour Package</th>
+                                                <th>Name</th>
+                                                <th>Details</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in items %}
+                                            <tr>
+                                                <td>{{ item.id }}</td>
+                                                <td>{{ item.tour_package.package_name }}</td>
+                                                <td>{{ item.name }}</td>
+                                                <td>{{ item.details }}</td>
+                                                <td class="d-flex flex-row gap-2">
+                                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ item.id }}">
+                                                        <i class="bx bx-edit-alt"></i>
+                                                    </button>
+                                                    <a href="{% url 'delete-inclusion-exclusion' item.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">
+                                                        <i class="bx bx-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                    
+                                            <!-- Update Modal -->
+                                            <div class="modal fade modal-lg" id="updateModal{{ item.id }}" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Update Inclusion/Exclusion</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="item_id" value="{{ item.id }}">
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Tour Package:</label>
+                                                                    <select class="form-select" name="tour_package">
+                                                                        {% for package in tour_packages %}
+                                                                            <option value="{{ package.id }}" {% if package.id == item.tour_package.id %}selected{% endif %}>
+                                                                                {{ package.package_name }}
+                                                                            </option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Name:</label>
+                                                                    <input type="text" class="form-control" name="name" value="{{ item.name }}">
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Details:</label>
+                                                                    <textarea class="form-control" name="details">{{ item.details }}</textarea>
+                                                                </div>
+                    
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <p class="p-2">{{ total_items }} Items Found</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                                                                              
+                    <!-- Add Inclusion/Exclusion Modal -->
+                    <div class="modal fade modal-lg" id="addInclusionExclusionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="inclusionExclusionModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="inclusionExclusionModalLabel">Add Inclusion/Exclusion</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="card-body">
+                                    <form action="{% url 'inclusion-exclusion' %}" method="POST">
+                                        {% csrf_token %}
+
+                                        <!-- Select Tour Package -->
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-3 label-small fw-bold">Tour Package:</label>
+                                            <div class="col-md-9">
+                                                <select class="form-select" name="tour_package" required>
+                                                    <option value="">--------</option>
+                                                    {% for package in tour_packages %}
+                                                        <option value="{{ package.id }}">{{ package.package_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Inclusion/Exclusion Name -->
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-3 label-small fw-bold">Name:</label>
+                                            <div class="col-md-9">
+                                                <input type="text" name="name" class="form-control bg-white" placeholder="Included / Not Included" required>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Details -->
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-3 label-small fw-bold">Details:</label>
+                                            <div class="col-md-9">
+                                                <textarea name="details" class="form-control" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Save Button -->
+                                        <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                            <button type="submit" class="btn btn-sm btn-custom px-3">SAVE</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+     
+                </div>
+            </div>
+
+            <!-- modal end -->
+
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+{% endblock %}

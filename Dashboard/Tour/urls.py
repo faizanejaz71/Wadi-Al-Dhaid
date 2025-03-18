@@ -47,5 +47,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.Index, name='home'),
+    path('', views.Index, name='tour_home'),
 ]

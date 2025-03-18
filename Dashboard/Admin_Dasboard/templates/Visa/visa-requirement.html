@@ -25,7 +25,7 @@
                             <tbody>
                                 {% for requirement in visa_reqs %}
                                 <tr>
-                                    <td>{{ requirement.id }}</td>
+                                    <td>{{ forloop.counter }}</td>
                                     <td>{{ requirement.visa_details.country_name }}</td>
                                     <td>{{ requirement.person_type }}</td>
                                     <td class="d-flex flex-row gap-2">

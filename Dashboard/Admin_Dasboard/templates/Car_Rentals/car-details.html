@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="row w-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 fs-5">Car Categories</p>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addCarModal"><i class='bx bx-plus'></i> Add Car Category</button>
+                    </div>
+                    
+                    <!-- Search Input -->
+                    <form action="{% url 'car-category' %}" method="GET">
+                        <div class="search-person border-outline-dark col-12 bg-secondary-subtle p-1 d-flex mt-2 text-muted">
+                            <div class="input-group border-outline-dark">
+                                <span class="input-group-text bg-white">
+                                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control bg-white" name="search" placeholder="Search category..." value="{{ search_query }}">
+                            </div>
+                            <button type="submit" class="btn btn-white bg-white border ms-2">Search</button>
+                        </div>
+                    </form>
+                    
+                    <div>
+                        <table class="table mt-3">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Car Name</th>
+                                    <th>Brand</th>
+                                    <th>Category</th>
+                                    <th>Model From</th>
+                                    <th>Model To</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for car in cars %}
+                                <tr>
+                                    <td>{{ car.id }}</td>
+                                    <td>
+                                        {% if car.image %}
+                                            <img src="{{ car.image.url }}" alt="Car Image" width="60" height="40" class="rounded">
+                                        {% else %}
+                                            No Image
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ car.name }}</td>
+                                    <td>{{ car.brand }}</td>
+                                    <td>{{ car.category.category_name }}</td>
+                                    <td>{{ car.model_from }}</td>
+                                    <td>{{ car.model_to }}</td>
+                                    <td>
+                                        <div>
+                                            <button class="btn btn-warning btn-sm mx-1 edit-btn" 
+                                                data-id="{{ car.id }}" 
+                                                data-category="{{ car.category.id }}" 
+                                                data-name="{{ car.name }}"
+                                                data-brand="{{ car.brand }}"
+                                                data-model_from="{{ car.model_from }}"
+                                                data-model_to="{{ car.model_to }}"
+                                                data-description="{{ car.description }}"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#updateModal{{ car.id }}">
+                                                <i class="bx bx-edit-alt"></i>
+                                            </button>
+                                            <a href="{% url 'delete-car' car.id %}" 
+                                               class="btn btn-danger btn-sm mx-1" 
+                                               onclick="return confirm('Are you sure you want to delete this car?');">
+                                                <i class="bx bx-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <div class="modal fade modal-lg" id="updateModal{{ car.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Car Details</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="mb-0 fs-5">Edit Car Information</p>
+                                                <form action="{% url 'car-details' %}" method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="car_id" value="{{ car.id }}">
+                                                    
+                                                    <div class="mt-3">
+                                                        <label>Current Image:</label><br>
+                                                        {% if car.image %}
+                                                            <img src="{{ car.image.url }}" alt="Car Image" width="100" height="70" class="rounded">
+                                                        {% else %}
+                                                            No Image Available
+                                                        {% endif %}
+                                                    </div>
+                                                    
+                                                    <div class="mt-3">
+                                                        <label>Upload New Image:</label>
+                                                        <input type="file" name="image" class="form-control bg-white">
+                                                    </div>
+                                                    
+                                                    <div class="mt-3">
+                                                        <label>Car Name:</label>
+                                                        <input type="text" name="name" value="{{ car.name }}" class="form-control bg-white" required>
+                                                    </div>
+                                                    
+                                                    <div class="mt-3">
+                                                        <label>Brand:</label>
+                                                        <input type="text" name="brand" value="{{ car.brand }}" class="form-control bg-white" required>
+                                                    </div>
+                                                    
+                                                    <div class="mt-3">
+                                                        <label>Category:</label>
+                                                        <select name="category_id" class="form-control bg-white" required>
+                                                            {% for category in car_categories %}
+                                                                <option value="{{ category.id }}" {% if category.id == car.category.id %}selected{% endif %}>
+                                                                    {{ category.category_name }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="mt-3">
+                                                        <label>Model From:</label>
+                                                        <input type="number" name="model_from" value="{{ car.model_from }}" class="form-control bg-white" required>
+                                                    </div>
+                                                    
+                                                    <div class="mt-3">
+                                                        <label>Model To:</label>
+                                                        <input type="number" name="model_to" value="{{ car.model_to }}" class="form-control bg-white" required>
+                                                    </div>
+                                                    
+                                                    <div class="mt-3">
+                                                        <label>Description:</label>
+                                                        <textarea name="description" class="form-control bg-white" required>{{ car.description }}</textarea>
+                                                    </div>
+                                                    
+                                                    <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                                        <button type="submit" class="btn btn-sm btn-custom px-3">SAVE</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <p class="p-2">{{ total_cars }} Cars Listed</p>
+                    </div>
+                    
+                    
+                    <!-- Add Car Modal -->
+                    <div class="modal fade modal-lg" id="addCarModal" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="addCarModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="addCarModalLabel">Add Car</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="card-body">
+                                    <form action="{% url 'car-details' %}" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label class="form-label">Car Category:</label>
+                                            <select name="category_id" class="form-select" required>
+                                                <option value="" disabled selected>Select Category</option>
+                                                {% for category in car_categories %}
+                                                    <option value="{{ category.id }}">{{ category.category_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Car Name:</label>
+                                            <input type="text" name="name" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Brand:</label>
+                                            <input type="text" name="brand" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Model From:</label>
+                                            <input type="number" name="model_from" class="form-control" required min="1900" max="2025">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Model To:</label>
+                                            <input type="number" name="model_to" class="form-control" required min="1900" max="2025">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Car Image:</label>
+                                            <input type="file" name="image" class="form-control" accept="image/*" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Description:</label>
+                                            <textarea name="description" class="form-control" rows="3" required></textarea>
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-sm btn-custom px-3">SAVE</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- modal end -->
+
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+{% endblock %}

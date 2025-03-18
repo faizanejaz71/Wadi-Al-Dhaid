@@ -48,7 +48,7 @@
                                         <tbody>
                                             {% for offer in offer_detail %}
                                             <tr>
-                                                <td>{{ offer.id }}</td>
+                                                <td>{{ forloop.counter }}</td>
                                                 <td>{{ offer.document_name }}</td>
                                                 <td>{{ offer.city }}</td>
                                                 <td>{{ offer.hotel_name }}</td>

@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="row w-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 fs-5">Counters</p>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addCounterModal"><i class='bx bx-plus'></i> Add Counters</button>
+                    </div>
+                    
+                    <!-- Search Input -->
+                    <form action="{% url 'counter-list' %}" method="GET">
+                        <div class="search-person border-outline-dark col-12 bg-secondary-subtle p-1 d-flex mt-2 text-muted">
+                            <div class="input-group border-outline-dark">
+                                <span class="input-group-text bg-white">
+                                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control bg-white" name="search" placeholder="Search category..." value="{{ search_query }}">
+                            </div>
+                            <button type="submit" class="btn btn-white bg-white border ms-2">Search</button>
+                        </div>
+                    </form>
+                    
+                    <div>
+                        <table class="table mt-3">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Counter Name</th>
+                                    <th>Half</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for counter in counters %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ counter.name }}</td>
+                                    <td>{{ counter.half }}</td>
+                                    <td>
+                                        <!-- Edit Button -->
+                                        <button class="btn btn-warning btn-sm mx-1" data-bs-toggle="modal" data-bs-target="#updateModal{{ counter.id }}">
+                                            <i class="bx bx-edit-alt"></i>
+                                        </button>
+                    
+                                        <!-- Delete Button -->
+                                        <a href="{% url 'delete-counter' counter.id %}" class="btn btn-danger btn-sm mx-1" 
+                                            onclick="return confirm('Are you sure you want to delete this counter?');">
+                                            <i class="bx bx-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                    
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id="updateModal{{ counter.id }}" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel{{ counter.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Edit Counter</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{% url 'counter-list' %}" method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="counter_id" value="{{ counter.id }}">
+                                                    <div class="mb-3">
+                                                        <label>Counter Name:</label>
+                                                        <input type="text" name="name" value="{{ counter.name }}" class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label>Half:</label>
+                                                        <input type="text" name="half" value="{{ counter.half }}" class="form-control">
+                                                    </div>
+                                                    <div>
+                                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <p class="p-2">{{ total_counters }} Counters Found</p>
+                    
+                        <!-- Add New Counter Modal -->
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addCounterModal">Add Counter</button>
+                    
+                        <div class="modal fade" id="addCounterModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                            aria-labelledby="addCounterLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Add New Counter</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'counter-list' %}" method="POST">
+                                            {% csrf_token %}
+                                            <div class="mb-3">
+                                                <label>Counter Name:</label>
+                                                <input type="text" name="name" class="form-control" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label>Half:</label>
+                                                <input type="text" name="half" class="form-control" required>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="btn btn-success">Add Counter</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- Add Counter Modal -->
+                    <div class="modal fade modal-lg" id="counterModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="counterModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="counterModalLabel">Add Counter</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{% url 'counter-list' %}" method="POST">
+                                        {% csrf_token %}
+
+                                        <!-- Hidden field for updating an existing record -->
+                                        <input type="hidden" name="counter_id" id="counter_id">
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Counter Name:</label>
+                                            <input type="text" name="name" id="name" class="form-control" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Half:</label>
+                                            <input type="text" name="half" id="half" class="form-control" required>
+                                        </div>
+
+                                        <div class="mt-4 text-end">
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- modal end -->
+
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+{% endblock %}

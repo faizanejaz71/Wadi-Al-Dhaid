@@ -47,7 +47,7 @@
                                         {% for document in documents %}
                                         <tr>
                                             <td><input type="checkbox"></td>
-                                            <td>{{ document.id }}</td>
+                                            <td>{{ forloop.counter }}</td>
                                             <td>{{ document.visa_requirements }}</td>
                                             <td>{{ document.person_type|default:"N/A" }}</td>
                                             <td>{{ document.document_name }}</td>

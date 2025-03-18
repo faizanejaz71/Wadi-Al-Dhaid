@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'Umrah',
     'Tour',
     'CarRental',
+    'Offer',
+    'Web',
     'Admin_Dasboard',
     'rest_framework',
     'rest_framework.authtoken',

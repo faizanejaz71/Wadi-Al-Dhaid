@@ -73,10 +73,23 @@
 
             <!-- Account Pages -->
             <li class="menu-item">
-              <a href="{% url 'navigation' %}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-navigation"></i>
-                <div class="text-truncate" data-i18n="Account Pages">Navigation</div>
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class='menu-icon tf-icons bx bx-navigation'></i>
+                <div class="text-truncate">Navbar</div>
+                <span class="badge rounded-pill bg-danger ms-auto">5</span>
               </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="{% url 'navbar-logo' %}" class="menu-link">
+                    logo
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'flights' %}" class="menu-link">
+                    logo
+                  </a>
+                </li>                
+              </ul>
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -130,7 +143,7 @@
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class='bx bxs-plane-alt'></i>
+                <i class='menu-icon tf-icons bx bxs-plane-alt'></i>
                 <div class="text-truncate">Flights</div>
                 <span class="badge rounded-pill bg-danger ms-auto">5</span>
               </a>
@@ -230,18 +243,146 @@
                     </li>
                   </ul>
                 </li>
+                <!-- Hotel Detail -->
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <div class="text-truncate">Hotel</div>
+                  </a>
+                  <ul class="menu-sub">
+                    <li class="menu-item">
+                      <a href="{% url 'hotel-service-list' %}" class="menu-link">
+                        <div class="text-truncate">Services</div>
+                      </a>
+                    </li>
+                    <li class="menu-item">
+                      <a href="{% url 'hotel-details' %}" class="menu-link">
+                        <div class="text-truncate">Hotel Details</div>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!-- Visa Detail -->
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <div class="text-truncate">Visa</div>
+                  </a>
+                  <ul class="menu-sub">
+                    <li class="menu-item">
+                      <a href="{% url 'visa-requirements' %}" class="menu-link">
+                        <div class="text-truncate">Visa Requirements</div>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!-- Inclusion / Exclusion -->
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <div class="text-truncate">Inclusion / Exclusion</div>
+                  </a>
+                  <ul class="menu-sub">
+                    <li class="menu-item">
+                      <a href="{% url 'inclusion-exclusion' %}" class="menu-link">
+                        <div class="text-truncate">Details</div>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!-- Inclusion / Exclusion -->
+                <li class="menu-item">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <div class="text-truncate">Terms & Conditions</div>
+                  </a>
+                  <ul class="menu-sub">
+                    <li class="menu-item">
+                      <a href="{% url 'terms-conditions' %}" class="menu-link">
+                        <div class="text-truncate">Details</div>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
               </ul>
             </li>
-            
-            
             <li class="menu-item">
-              <a href="{% url 'carsrent' %}" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-car"></i>
-                <div class="text-truncate" data-i18n="Account Pages">Cars Rental</div>
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class='menu-icon tf-icons bx bxs-car'></i> 
+                <div class="text-truncate">Car Rentals</div>
+                <span class="badge rounded-pill bg-danger ms-auto">5</span>
               </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="{% url 'car-category' %}" class="menu-link">
+                    <div class="text-truncate">Category</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'car-details' %}" class="menu-link">
+                    <div class="text-truncate">Car</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'car-rent' %}" class="menu-link">
+                    <div class="text-truncate">Rents</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'car-terms-and-conditions' %}" class="menu-link">
+                    <div class="text-truncate">Terms & Conditions</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                
+              </ul>
             </li>
             <li class="menu-item">
-              <a href="{% url 'hero' %}" class="menu-link">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class='menu-icon tf-icons bx bxs-home'></i>
+                <div class="text-truncate">Home Page Layouts</div>
+                <span class="badge rounded-pill bg-danger ms-auto">5</span>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="{% url 'counter-list' %}" class="menu-link">
+                    Counter
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'offer-videos' %}" class="menu-link">
+                    <div class="text-truncate">Offer Video</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'tour-videos' %}" class="menu-link">
+                    <div class="text-truncate">Tour Video</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'seo-point-box' %}" class="menu-link">
+                    <div class="text-truncate">Seo Point Box</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'umrah-banners' %}" class="menu-link">
+                    <div class="text-truncate">Umrah Banner</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'why-book-us' %}" class="menu-link">
+                    <div class="text-truncate">Why Book Us</div>
+                    <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">6</div>
+                  </a>
+                </li>
+                
+              </ul>
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'new-home-banner' %}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-card"></i>
                 <div class="text-truncate" data-i18n="Account Pages">Hero</div>
               </a>
@@ -271,7 +412,7 @@
               </a>
             </li>
             <li class="menu-item">
-              <a href="{% url 'umrah-banner' %}" class="menu-link">
+              <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-photo-album"></i>
                 <div class="text-truncate" data-i18n="Account Pages">Umrah Banner</div>
               </a>

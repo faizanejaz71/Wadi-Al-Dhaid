@@ -75,7 +75,7 @@
                         <tbody>
                             {% for person in person_types %}
                             <tr>
-                                <td>{{person.id}}</td>
+                                <td>{{ forloop.counter }}</td>
                                 <td>{{person.person_type}}</td>
                                 <td class="d-flex flex-row gap-2">
                                         <div>

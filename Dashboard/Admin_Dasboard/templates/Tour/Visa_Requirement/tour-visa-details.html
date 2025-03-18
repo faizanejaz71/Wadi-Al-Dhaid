@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body %}
+<!-- Content wrapper -->
+<div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="row w-100">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="mb-0 fs-5">Visa Requirements</p>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addVisaModal"><i class='bx bx-plus'></i> Add Visa details</button>
+                    </div>
+                    <!-- seacrch input -->
+                    <form action="{% url 'visa-requirements' %}" method="GET">
+                        {% csrf_token %}
+                        <div class="search-person border-outline-dark col-12 bg-secondary-subtle p-1 d-flex mt-2 text-muted">
+                            <div class="input-group border-outline-dark">
+                                <span class="input-group-text bg-white">
+                                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                                </span>
+                                <input type="text" class="form-control bg-white" name="search" placeholder="Search detail..." value="{{ search_query }}">
+                            </div>
+                            <button type="submit" class="btn btn-white bg-white border ms-2">Search</button>
+                        </div>
+                    </form>
+                    <div class="col-12 mt-3">
+                        <div class="row">
+                            <div class="col-lg-12 mt-3">
+                                <div>
+                                    <!-- Search Form -->
+                                    <form method="GET" class="mb-3">
+                                        <input type="text" name="search" class="form-control" placeholder="Search Visa Requirements..." value="{{ search_query }}">
+                                    </form>
+                    
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Tour Package</th>
+                                                <th>Person Type</th>
+                                                <th>Document Name</th>
+                                                <th>Document Details</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for requirement in requirements %}
+                                            <tr>
+                                                <td>{{ requirement.id }}</td>
+                                                <td>{{ requirement.tour_package.package_name }}</td>
+                                                <td>{{ requirement.person_type }}</td>
+                                                <td>{{ requirement.document_name }}</td>
+                                                <td>{{ requirement.document_details }}</td>
+                                                <td class="d-flex flex-row gap-2">
+                                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ requirement.id }}">
+                                                        <i class="bx bx-edit-alt"></i>
+                                                    </button>
+                                                    <a href="{% url 'delete-visa-requirement' requirement.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?');">
+                                                        <i class="bx bx-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                    
+                                            <!-- Update Modal -->
+                                            <div class="modal fade modal-lg" id="updateModal{{ requirement.id }}" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Update Visa Requirement</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST">
+                                                                {% csrf_token %}
+                                                                <input type="hidden" name="requirement_id" value="{{ requirement.id }}">
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Tour Package:</label>
+                                                                    <select class="form-select" name="tour_package">
+                                                                        {% for package in tour_packages %}
+                                                                            <option value="{{ package.id }}" {% if package.id == requirement.tour_package.id %}selected{% endif %}>
+                                                                                {{ package.package_name }}
+                                                                            </option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Person Type:</label>
+                                                                    <input type="text" class="form-control" name="person_type" value="{{ requirement.person_type }}">
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Document Name:</label>
+                                                                    <input type="text" class="form-control" name="document_name" value="{{ requirement.document_name }}">
+                                                                </div>
+                    
+                                                                <div class="mb-3">
+                                                                    <label class="fw-bold">Document Details:</label>
+                                                                    <textarea class="form-control" name="document_details">{{ requirement.document_details }}</textarea>
+                                                                </div>
+                    
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <p class="p-2">{{ total_requirements }} Visa Requirements</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                                                           
+                    <!-- Add Visa Requirement Modal -->
+                    <div class="modal fade modal-lg" id="addVisaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visaModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="visaModalLabel">Add Visa Requirement</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="card-body">
+                                    <form action="{% url 'visa-requirements' %}" method="POST">
+                                        {% csrf_token %}
+
+                                        <!-- Select Tour Package -->
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-3 label-small fw-bold">Tour Package:</label>
+                                            <div class="col-md-9">
+                                                <select class="form-select" name="tour_package" required>
+                                                    <option value="">--------</option>
+                                                    {% for package in tour_packages %}
+                                                        <option value="{{ package.id }}">{{ package.package_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Person Type -->
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-3 label-small fw-bold">Person Type:</label>
+                                            <div class="col-md-9">
+                                                <input type="text" name="person_type" class="form-control bg-white" required>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Document Name -->
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-3 label-small fw-bold">Document Name:</label>
+                                            <div class="col-md-9">
+                                                <input type="text" name="document_name" class="form-control bg-white" required>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Document Details -->
+                                        <div class="row mb-3 align-items-center">
+                                            <label class="col-md-3 label-small fw-bold">Document Details:</label>
+                                            <div class="col-md-9">
+                                                <textarea name="document_details" class="form-control" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Save Button -->
+                                        <div class="person-btn d-flex p-2 mt-3 w-75 border rounded">
+                                            <button type="submit" class="btn btn-sm btn-custom px-3">SAVE</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>           
+                </div>
+            </div>
+
+            <!-- modal end -->
+
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+{% endblock %}

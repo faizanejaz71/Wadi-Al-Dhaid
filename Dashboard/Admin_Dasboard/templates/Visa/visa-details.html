@@ -47,7 +47,7 @@
                                     <tbody>
                                         {% for visa in visa_detail %}
                                         <tr>
-                                            <td>{{ visa.id }}</td>
+                                            <td>{{ forloop.counter }}</td>
                                             <td>{{ visa.visa_category }}</td>
                                             <td>{{ visa.country_name }}</td>
                                             <td>{{ visa.adult_price }}</td>

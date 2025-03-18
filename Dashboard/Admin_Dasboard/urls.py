@@ -20,7 +20,7 @@ urlpatterns = [
     path('tours-status/', views.ToursStatus, name='tours-status'),
     path('tours/', views.Tours, name='tours'),
     path('trending-visa/', views.TrendingVisa, name='trending-visa'),
-    path('umrah-banner/', views.UmrahBanner, name='umrah-banner'),
+    # path('umrah-banner/', views.UmrahBanner, name='umrah-banner'),
     path('umrah/', views.Umrah, name='umrah'),
     path('umrah-status/', views.UmrahStatus, name='umrah-status'),
     path('visa-status/', views.VisaStatus, name='visa-status'),
@@ -122,5 +122,131 @@ urlpatterns = [
     path('itinerary-details/', views.itinerary_details, name='itinerary-details'),
     path('delete-itinerary/<int:itinerary_id>/', views.delete_itinerary, name='delete-itinerary'),
 
-]
 
+
+
+    # Hotel Service
+    path('hotel-services/', views.hotel_service_list, name='hotel-service-list'),
+    path('hotel-services/delete/<int:service_id>/', views.delete_hotel_service, name='delete-hotel-service'), 
+
+
+
+
+    # Hotel Details
+    path('hotels/', views.hotel_details, name='hotel-details'),  # Hotel details page
+    path('hotels/delete/<int:hotel_id>/', views.delete_hotel, name='delete-hotel'),  # Delete a hotel
+
+
+
+    # Visa Requiremnts
+    path('visa-requirements/', views.visa_requirements, name='visa-requirements'),  # Visa requirements page
+    path('visa-requirements/delete/<int:requirement_id>/', views.delete_visa_requirement, name='delete-visa-requirement'),  # Delete a visa requirement
+
+
+
+    # Inclusion/Exclusion
+    path('inclusion-exclusion/', views.inclusion_exclusion, name='inclusion-exclusion'),
+    path('delete-inclusion-exclusion/<int:item_id>/', views.delete_inclusion_exclusion, name='delete-inclusion-exclusion'),
+
+
+
+    # Terms & Condition
+    path('terms-conditions/', views.terms_conditions, name='terms-conditions'),
+    path('terms-conditions/delete/<int:item_id>/', views.delete_terms_conditions, name='delete-terms-conditions'),
+
+
+
+
+
+    # Car Rentals
+
+    # Category
+    path('car-category/', views.car_category, name='car-category'),  # List, search, add, update
+    path('delete-car-category/<int:category_id>/', views.delete_car_category, name='delete-car-category'),  # Delete
+
+
+
+    # Car Details
+    path('car-details/', views.car_details, name='car-details'),  # View for car details
+    path('delete-car/<int:car_id>/', views.delete_car, name='delete-car'),  # Delete car
+
+
+
+
+
+
+    # Car Rents
+    path('car-rent/', views.car_rent, name='car-rent'),  # View for listing and updating car rent details
+    path('delete-car-rent/<int:rent_id>/', views.delete_car_rent, name='delete-car-rent'),
+
+
+
+
+    # Car Terms Condition
+    path('car-terms-and-conditions/', views.car_terms_and_conditions, name='car-terms-and-conditions'),  # List, Search, Add, Update
+    path('delete-car-terms-and-conditions/<int:terms_id>/', views.delete_car_terms_and_conditions, name='delete-car-terms-and-conditions'),
+
+
+
+
+
+    # <-- Navbar -->
+    # Logo
+    path('navbar-logo/', views.navbar_logo, name='navbar-logo'),
+    path('delete-logo/<int:logo_id>/', views.delete_logo, name='delete-logo'),
+
+
+
+
+    # Nav-links
+    path('navlinks/', views.navlinks_list, name='navlinks-list'),
+    path('navlinks/delete/<int:navlink_id>/', views.delete_navlink, name='delete-navlink'),
+
+
+
+    # NewHomeBanner 
+    path('banners/', views.new_home_banner, name='new-home-banner'),
+    path('banners/delete/<int:banner_id>/', views.delete_banner, name='delete-banner'),
+
+
+    # Counters
+    path('counters/', views.counter_list, name='counter-list'),
+    path('counters/delete/<int:counter_id>/', views.delete_counter, name='delete-counter'),
+
+
+
+
+    # Offer_Videos
+    path('offer-videos/', views.offer_videos, name='offer-videos'),  # List, Search, Create, Update
+    path('offer-videos/delete/<int:video_id>/', views.delete_offer_video, name='delete-offer-video'),  # Delete
+
+
+
+
+
+    # Seo_Point_Box
+    path('seo-point-box/', views.seo_point_box, name='seo-point-box'),  # View & CRUD operations
+    path('seo-point-box/delete/<int:box_id>/', views.delete_seo_point_box, name='delete-seo-point-box'),  # Delete operation
+
+
+
+    # Tour_Videos
+    path('tour-videos/', views.tour_videos, name='tour-videos'),
+    path('delete-tour-video/<int:video_id>/', views.delete_tour_video, name='delete-tour-video'),
+
+
+
+
+    path('umrah-banners/', views.umrah_banner_list, name='umrah-banners'),
+    path('umrah-banners/delete/<int:banner_id>/', views.delete_umrah_banner, name='delete-umrah-banner'),
+
+
+
+
+
+
+
+
+    path('why-book-us/', views.why_book_us, name='why-book-us'),
+    path('delete-why-book-us/<int:section_id>/', views.delete_why_book_us, name='delete-why-book-us'),
+]

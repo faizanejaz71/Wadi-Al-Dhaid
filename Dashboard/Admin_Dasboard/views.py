@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from Visa.models import VisaDetails, VisaCategory, PersonType, VisaRequirements, VisaDocuments
 from Umrah.models import UmrahCategory, UmrahDetails, OfferType, LimitedTimeOffer, OfferDetails
-from Tour.models import TourCategory, TourPackage, ItineraryService, ItineraryMeals, ItineraryDetail
+from Tour.models import TourCategory, TourPackage, ItineraryService, ItineraryMeals, ItineraryDetail, HotelService, HotelDetail, VisaRequirement, InclusionExclusion, TermsAndConditions
+from CarRental.models import CarCategory, Car, CarRent, CarTermsAndConditions
+from Web.models import Logo, NavLinks, NewHomeBanner, Counter, OfferVideo, SeoPointBox, TourVideo, UmrahBanner, WhyBookUs
 from django.contrib import messages
 
 # Create your views here.
-
+ 
 
 def Base (request):
     return render(request, 'base.html')
@@ -65,8 +67,6 @@ def Tours (request):
 def TrendingVisa (request):
     return render(request, 'trending-visas.html')
 
-def UmrahBanner (request):
-    return render(request, 'umrah-banner.html')
 
 def Umrah (request):
     return render(request, 'umrah.html')
@@ -759,7 +759,7 @@ def delete_tour_package(request, tour_id):
 
 # Tour Itinerary 
 
-# List and Search Itinerary Activities
+# Itinerary Activities
 def itinerary_activity_list(request):
     query = request.GET.get('search', '')  # Get search input from GET request
     total_activities_num = ItineraryService.objects.count()
@@ -923,3 +923,994 @@ def delete_itinerary(request, itinerary_id):
     itinerary.delete()
     return redirect('itinerary-details')
 
+
+
+
+
+
+
+
+# Hotel Service List and Search
+def hotel_service_list(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_services_num = HotelService.objects.count()  # Updated variable name
+
+    if query:
+        hotel_services = HotelService.objects.filter(name__icontains=query)  # Case-insensitive search
+    else:
+        hotel_services = HotelService.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        service_id = request.POST.get('service_id')  # Updated variable name
+        service_name = request.POST.get('service_name')  # Updated variable name
+
+        if service_id:  # Update existing record
+            service = get_object_or_404(HotelService, id=service_id)
+            service.name = service_name
+            service.save()
+        else:  # Create new hotel service
+            HotelService.objects.create(name=service_name)
+
+        return redirect('hotel-service-list')  # Redirect to the same page after adding/updating
+
+    context = {
+        'hotel_services': hotel_services,
+        'search_query': query,  # Pass search query to template
+        'total_services_num': total_services_num,  # Updated variable name
+    }
+    return render(request, 'Tour/Hotel/tour-hotel-service.html', context)
+
+
+# Delete Hotel Service
+def delete_hotel_service(request, service_id):  # Updated parameter name
+    service = get_object_or_404(HotelService, id=service_id)
+    service.delete()
+    return redirect('hotel-service-list')
+
+
+
+
+
+
+
+
+
+
+
+
+def hotel_details(request):
+    query = request.GET.get('search', '')  # Search functionality
+    total_hotels = HotelDetail.objects.count()
+
+    if query:
+        hotels = HotelDetail.objects.filter(name__icontains=query)
+    else:
+        hotels = HotelDetail.objects.all()
+
+    tour_packages = TourPackage.objects.all()
+    services = HotelService.objects.all()
+    hotel = None  # Initialize for edit functionality
+
+    if request.method == "POST":
+        hotel_id = request.POST.get('hotel_id')  # Get hotel_id for update
+        tour_package_id = request.POST.get('tour_package')  # Get linked tour package
+        name = request.POST.get('name')
+        ratings = request.POST.get('ratings')
+        address = request.POST.get('address')
+        image = request.FILES.get('image')
+        selected_services = request.POST.getlist('services')  # Get multiple selected services
+
+        # Ensure tour package is valid
+        if not tour_package_id:
+            messages.error(request, "Please select a valid tour package.")
+            return redirect('hotel-details')
+
+        tour_package = get_object_or_404(TourPackage, id=tour_package_id)
+
+        if hotel_id:
+            hotel = get_object_or_404(HotelDetail, id=hotel_id)
+            hotel.tour_package = tour_package
+            hotel.name = name
+            hotel.ratings = ratings
+            hotel.address = address
+            if image:
+                hotel.image = image  # Update only if new image is uploaded
+            hotel.save()
+            hotel.services.set(selected_services)  # Update ManyToMany fields
+        else:
+            hotel = HotelDetail.objects.create(
+                tour_package=tour_package,
+                name=name,
+                ratings=ratings,
+                address=address,
+                image=image
+            )
+            hotel.services.set(selected_services)
+
+        return redirect('hotel-details')
+
+    context = {
+        'hotels': hotels,
+        'tour_packages': tour_packages,
+        'services': services,
+        'total_hotels': total_hotels,
+        'hotel': hotel,  # Send hotel object for update
+        'search_query': query,  # Pass search query to template
+    }
+    return render(request, 'Tour/Hotel/tour-hotel-details.html', context)
+
+
+def delete_hotel(request, hotel_id):
+    hotel = get_object_or_404(HotelDetail, id=hotel_id)
+    hotel.delete()
+    return redirect('hotel-details')
+
+
+
+
+
+
+
+
+def visa_requirements(request):
+    query = request.GET.get('search', '')  # Search functionality
+    total_requirements = VisaRequirement.objects.count()
+
+    if query:
+        requirements = VisaRequirement.objects.filter(document_name__icontains=query)
+    else:
+        requirements = VisaRequirement.objects.all()
+
+    tour_packages = TourPackage.objects.all()
+    requirement = None  # Initialize for edit functionality
+
+    if request.method == "POST":
+        requirement_id = request.POST.get('requirement_id')  # Get requirement_id for update
+        tour_package_id = request.POST.get('tour_package')  # Get linked tour package
+        person_type = request.POST.get('person_type')
+        document_name = request.POST.get('document_name')
+        document_details = request.POST.get('document_details')
+
+        # Ensure tour package is valid
+        if not tour_package_id:
+            messages.error(request, "Please select a valid tour package.")
+            return redirect('visa-requirements')
+
+        tour_package = get_object_or_404(TourPackage, id=tour_package_id)
+
+        if requirement_id:
+            requirement = get_object_or_404(VisaRequirement, id=requirement_id)
+            requirement.tour_package = tour_package
+            requirement.person_type = person_type
+            requirement.document_name = document_name
+            requirement.document_details = document_details
+            requirement.save()
+        else:
+            VisaRequirement.objects.create(
+                tour_package=tour_package,
+                person_type=person_type,
+                document_name=document_name,
+                document_details=document_details
+            )
+
+        return redirect('visa-requirements')
+
+    context = {
+        'requirements': requirements,
+        'tour_packages': tour_packages,
+        'total_requirements': total_requirements,
+        'requirement': requirement,  # Send requirement object for update
+        'search_query': query,  # Pass search query to template
+    }
+    return render(request, 'Tour/Visa_Requirement/tour-visa-details.html', context)
+
+
+def delete_visa_requirement(request, requirement_id):
+    requirement = get_object_or_404(VisaRequirement, id=requirement_id)
+    requirement.delete()
+    return redirect('visa-requirements')
+
+
+
+
+
+
+
+
+def inclusion_exclusion(request):
+    query = request.GET.get('search', '')  # Search functionality
+    total_items = InclusionExclusion.objects.count()
+
+    if query:
+        items = InclusionExclusion.objects.filter(name__icontains=query)
+    else:
+        items = InclusionExclusion.objects.all()
+
+    tour_packages = TourPackage.objects.all()
+    item = None  # Initialize for edit functionality
+
+    if request.method == "POST":
+        item_id = request.POST.get('item_id')  # Get item_id for update
+        tour_package_id = request.POST.get('tour_package')  # Get linked tour package
+        name = request.POST.get('name')
+        details = request.POST.get('details')
+
+        # Ensure tour package is valid
+        if not tour_package_id:
+            messages.error(request, "Please select a valid tour package.")
+            return redirect('inclusion-exclusion')
+
+        tour_package = get_object_or_404(TourPackage, id=tour_package_id)
+
+        if item_id:
+            item = get_object_or_404(InclusionExclusion, id=item_id)
+            item.tour_package = tour_package
+            item.name = name
+            item.details = details
+            item.save()
+        else:
+            InclusionExclusion.objects.create(
+                tour_package=tour_package,
+                name=name,
+                details=details
+            )
+
+        return redirect('inclusion-exclusion')
+
+    context = {
+        'items': items,
+        'tour_packages': tour_packages,
+        'total_items': total_items,
+        'item': item,  # Send item object for update
+        'search_query': query,  # Pass search query to template
+    }
+    return render(request, 'Tour/Inclusion_Exclusion/tour-Inclu-Exclu-details.html', context)
+
+
+def delete_inclusion_exclusion(request, item_id):
+    item = get_object_or_404(InclusionExclusion, id=item_id)
+    item.delete()
+    return redirect('inclusion-exclusion')
+
+
+
+
+
+
+
+
+
+
+
+def terms_conditions(request):
+    query = request.GET.get('search', '')  # Search functionality
+    total_items = TermsAndConditions.objects.count()
+
+    if query:
+        items = TermsAndConditions.objects.filter(details__icontains=query)
+    else:
+        items = TermsAndConditions.objects.all()
+
+    tour_packages = TourPackage.objects.all()
+    item = None  # Initialize for edit functionality
+
+    if request.method == "POST":
+        item_id = request.POST.get('item_id')  # Get item_id for update
+        tour_package_id = request.POST.get('tour_package')  # Get linked tour package
+        details = request.POST.get('details')
+
+        # Ensure tour package is valid
+        if not tour_package_id:
+            messages.error(request, "Please select a valid tour package.")
+            return redirect('terms-conditions')
+
+        tour_package = get_object_or_404(TourPackage, id=tour_package_id)
+
+        if item_id:
+            item = get_object_or_404(TermsAndConditions, id=item_id)
+            item.tour_package = tour_package
+            item.details = details
+            item.save()
+        else:
+            TermsAndConditions.objects.create(
+                tour_package=tour_package,
+                details=details
+            )
+
+        return redirect('terms-conditions')
+
+    context = {
+        'items': items,
+        'tour_packages': tour_packages,
+        'total_items': total_items,
+        'item': item,  # Send item object for update
+        'search_query': query,  # Pass search query to template
+    }
+    return render(request, 'Tour/Terms_Conditions/tour-Terms-Condtion.html', context)
+
+
+def delete_terms_conditions(request, item_id):
+    item = get_object_or_404(TermsAndConditions, id=item_id)
+    item.delete()
+    return redirect('terms-conditions')
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Car Category View
+def car_category(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_cars_num = CarCategory.objects.count()  # Count total categories
+
+    if query:
+        car_categories = CarCategory.objects.filter(category_name__icontains=query)  # Case-insensitive search
+    else:
+        car_categories = CarCategory.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        car_id = request.POST.get('car_id')  # Check if it's an update
+        category_name = request.POST.get('category_name')
+
+        if car_id:  # Update existing record
+            category = get_object_or_404(CarCategory, id=car_id)
+            category.category_name = category_name
+            category.save()
+        else:  # Create new category
+            CarCategory.objects.create(category_name=category_name)
+
+        return redirect('car-category')  # Redirect to the same page after adding/updating
+
+    context = {
+        'car_categories': car_categories,
+        'search_query': query,  # Pass search query to template
+        'total_cars_num': total_cars_num,
+    }
+    return render(request, 'Car_Rentals/category.html', context)
+
+
+# Delete Car Category
+def delete_car_category(request, category_id):
+    category = get_object_or_404(CarCategory, id=category_id)
+    category.delete()
+    return redirect('car-category')
+
+
+
+
+
+
+
+
+# Car Details View
+def car_details(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_cars = Car.objects.count()  # Count total cars
+
+    if query:
+        cars = Car.objects.filter(name__icontains=query)  # Case-insensitive search
+    else:
+        cars = Car.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        car_id = request.POST.get('car_id')  # Check if it's an update
+        category_id = request.POST.get('category_id')
+        name = request.POST.get('name')
+        brand = request.POST.get('brand')
+        model_from = request.POST.get('model_from')
+        model_to = request.POST.get('model_to')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')  # Get uploaded image
+
+        category = get_object_or_404(CarCategory, id=category_id)
+
+        if car_id:  # Update existing car
+            car = get_object_or_404(Car, id=car_id)
+            car.category = category
+            car.name = name
+            car.brand = brand
+            car.model_from = model_from
+            car.model_to = model_to
+            car.description = description
+            if image:
+                car.image = image  # Update image if provided
+            car.save()
+        else:  # Create new car entry
+            Car.objects.create(
+                category=category,
+                name=name,
+                brand=brand,
+                model_from=model_from,
+                model_to=model_to,
+                description=description,
+                image=image  # Save uploaded image
+            )
+
+        return redirect('car-details')  # Redirect after adding/updating
+
+    context = {
+        'cars': cars,
+        'search_query': query,  # Pass search query to template
+        'total_cars': total_cars,
+        'car_categories': CarCategory.objects.all(),  # Pass all car categories for form selection
+    }
+    return render(request, 'Car_Rentals/car-details.html', context)
+
+# Delete Car
+def delete_car(request, car_id):
+    car = get_object_or_404(Car, id=car_id)
+    car.delete()
+    return redirect('car-details')
+
+
+
+
+
+
+
+
+
+
+# Car Rent View
+def car_rent(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_rentals = CarRent.objects.count()  # Count total rentals
+
+    if query:
+        rentals = CarRent.objects.filter(car__name__icontains=query)  # Case-insensitive search by car name
+    else:
+        rentals = CarRent.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        rent_id = request.POST.get('rent_id')  # Check if it's an update
+        car_id = request.POST.get('car_id')
+        rent_within_city_before = request.POST.get('rent_within_city_before')
+        rent_within_city_after = request.POST.get('rent_within_city_after')
+        rent_out_of_station_before = request.POST.get('rent_out_of_station_before')
+        rent_out_of_station_after = request.POST.get('rent_out_of_station_after')
+
+        car = get_object_or_404(Car, id=car_id)
+
+        if rent_id:  # Update existing rent record
+            rent = get_object_or_404(CarRent, id=rent_id)
+            rent.car = car
+            rent.rent_within_city_before = rent_within_city_before
+            rent.rent_within_city_after = rent_within_city_after
+            rent.rent_out_of_station_before = rent_out_of_station_before
+            rent.rent_out_of_station_after = rent_out_of_station_after
+            rent.save()
+        else:  # Create new rent record
+            CarRent.objects.create(
+                car=car,
+                rent_within_city_before=rent_within_city_before,
+                rent_within_city_after=rent_within_city_after,
+                rent_out_of_station_before=rent_out_of_station_before,
+                rent_out_of_station_after=rent_out_of_station_after
+            )
+
+        return redirect('car-rent')  # Redirect after adding/updating
+
+    context = {
+        'rentals': rentals,
+        'search_query': query,  # Pass search query to template
+        'total_rentals': total_rentals,
+        'cars': Car.objects.all(),  # Pass all cars for dropdown selection
+    }
+    return render(request, 'Car_Rentals/rent.html', context)
+
+
+
+# Delete Car Rent Record
+def delete_car_rent(request, rent_id):
+    rent = get_object_or_404(CarRent, id=rent_id)
+    rent.delete()
+    return redirect('car-rent')
+
+
+
+
+
+
+
+
+
+# Car Terms and Conditions View
+def car_terms_and_conditions(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_terms = CarTermsAndConditions.objects.count()  # Count total terms and conditions
+
+    if query:
+        terms_conditions = CarTermsAndConditions.objects.filter(car__name__icontains=query)  # Case-insensitive search by car name
+    else:
+        terms_conditions = CarTermsAndConditions.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        terms_id = request.POST.get('terms_id')  # Check if it's an update
+        car_id = request.POST.get('car_id')
+        terms = request.POST.get('terms')
+
+        car = get_object_or_404(Car, id=car_id)
+
+        if terms_id:  # Update existing terms record
+            terms_condition = get_object_or_404(CarTermsAndConditions, id=terms_id)
+            terms_condition.car = car
+            terms_condition.terms = terms
+            terms_condition.save()
+        else:  # Create new terms record
+            CarTermsAndConditions.objects.create(car=car, terms=terms)
+
+        return redirect('car-terms-and-conditions')  # Redirect after adding/updating
+
+    context = {
+        'terms_conditions': terms_conditions,
+        'search_query': query,  # Pass search query to template
+        'total_terms': total_terms,
+        'cars': Car.objects.all(),  # Pass all cars for dropdown selection
+    }
+    return render(request, 'Car_Rentals/terms_condition.html', context)
+
+
+# Delete Car Terms and Conditions Record
+def delete_car_terms_and_conditions(request, terms_id):
+    terms_condition = get_object_or_404(CarTermsAndConditions, id=terms_id)
+    terms_condition.delete()
+    return redirect('car-terms-and-conditions')
+
+
+
+
+
+
+
+
+# <-- NavBar-->
+
+# Navbar Logo View
+def navbar_logo(request):
+    query = request.GET.get('search', '')  # Search query from GET request
+    total_logos = Logo.objects.count()  # Count total logos
+
+    if query:
+        logos = Logo.objects.filter(image__icontains=query)  # Case-insensitive search (file name)
+    else:
+        logos = Logo.objects.all()  # Show all logos
+
+    if request.method == "POST":
+        logo_id = request.POST.get('logo_id')  # Check if it's an update
+        image = request.FILES.get('image')  # Get uploaded image
+
+        if logo_id:  # Update existing logo
+            logo = get_object_or_404(Logo, id=logo_id)
+            if image:
+                logo.image = image  # Update image if provided
+            logo.save()
+        else:  # Create new logo entry
+            Logo.objects.create(image=image)  # Save uploaded image
+
+        return redirect('navbar-logo')  # Redirect after adding/updating
+
+    context = {
+        'logos': logos,
+        'search_query': query,  # Pass search query to template
+        'total_logos': total_logos,
+    }
+    return render(request, 'Web/Navbar/logo.html', context)
+
+# Delete Navbar Logo
+def delete_logo(request, logo_id):
+    logo = get_object_or_404(Logo, id=logo_id)
+    logo.delete()
+    return redirect('navbar-logo')
+
+
+
+
+
+
+
+# NavLinks View
+def navlinks_list(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_navlinks = NavLinks.objects.count()  # Count total navlinks
+
+    if query:
+        navlinks = NavLinks.objects.filter(name__icontains=query)  # Case-insensitive search
+    else:
+        navlinks = NavLinks.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        navlink_id = request.POST.get('navlink_id')  # Check if it's an update
+        name = request.POST.get('name')
+        url = request.POST.get('url')
+
+        if navlink_id:  # Update existing navlink
+            navlink = get_object_or_404(NavLinks, id=navlink_id)
+            navlink.name = name
+            navlink.url = url
+            navlink.save()
+        else:  # Create new navlink entry
+            NavLinks.objects.create(name=name, url=url)
+
+        return redirect('navlinks-list')  # Redirect after adding/updating
+
+    context = {
+        'navlinks': navlinks,
+        'search_query': query,  # Pass search query to template
+        'total_navlinks': total_navlinks,
+    }
+    return render(request, 'Web/Navbar/nav-links.html', context)
+
+# Delete NavLink
+def delete_navlink(request, navlink_id):
+    navlink = get_object_or_404(NavLinks, id=navlink_id)
+    navlink.delete()
+    return redirect('navlinks-list')
+
+
+
+
+
+
+
+# New home banner
+
+def new_home_banner(request):
+    query = request.GET.get('search', '')  # Get search input
+    total_banners = NewHomeBanner.objects.count()  # Count total banners
+
+    if query:
+        banners = NewHomeBanner.objects.filter(title__icontains=query)  # Case-insensitive search
+    else:
+        banners = NewHomeBanner.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        banner_id = request.POST.get('banner_id')  # Check if updating existing
+        title = request.POST.get('title')
+        gif_image = request.FILES.get('gif_image')  # Get uploaded GIF
+
+        if banner_id:  # Update existing banner
+            banner = get_object_or_404(NewHomeBanner, id=banner_id)
+            banner.title = title
+            if gif_image:
+                banner.gif_image = gif_image  # Update image if provided
+            banner.save()
+        else:  # Create new banner
+            NewHomeBanner.objects.create(
+                title=title,
+                gif_image=gif_image  # Save uploaded GIF
+            )
+
+        return redirect('new-home-banner')  # Redirect after adding/updating
+
+    context = {
+        'banners': banners,
+        'search_query': query,  # Pass search query to template
+        'total_banners': total_banners,
+    }
+    return render(request, 'Web/NewHomebanner.html', context)
+
+# Delete Banner
+def delete_banner(request, banner_id):
+    banner = get_object_or_404(NewHomeBanner, id=banner_id)
+    banner.delete()
+    return redirect('new-home-banner')
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Counter
+
+def counter_list(request):
+    query = request.GET.get('search', '')  # Get search input
+    total_counters = Counter.objects.count()  # Count total counters
+
+    if query:
+        counters = Counter.objects.filter(name__icontains=query)  # Case-insensitive search by name
+    else:
+        counters = Counter.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        counter_id = request.POST.get('counter_id')  # Check if it's an update
+        name = request.POST.get('name')
+        half = request.POST.get('half')
+
+        if counter_id:  # Update existing counter record
+            counter = get_object_or_404(Counter, id=counter_id)
+            counter.name = name
+            counter.half = half
+            counter.save()
+        else:  # Create new counter record
+            Counter.objects.create(name=name, half=half)
+
+        return redirect('counter-list')  # Redirect after adding/updating
+
+    context = {
+        'counters': counters,
+        'search_query': query,  # Pass search query to template
+        'total_counters': total_counters,
+    }
+    return render(request, 'Web/Counter.html', context)
+
+# Delete Counter Record
+def delete_counter(request, counter_id):
+    counter = get_object_or_404(Counter, id=counter_id)
+    counter.delete()
+    return redirect('counter-list')
+
+
+
+
+
+
+
+
+
+# ✅ Offer Video View
+def offer_videos(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_videos = OfferVideo.objects.count()  # Count total videos
+
+    if query:
+        videos = OfferVideo.objects.filter(title__icontains=query)  # Case-insensitive search by title
+    else:
+        videos = OfferVideo.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        video_id = request.POST.get('video_id')  # Check if it's an update
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        video_file = request.FILES.get('video_file')
+
+        if video_id:  # Update existing video record
+            video = get_object_or_404(OfferVideo, id=video_id)
+            video.title = title
+            video.description = description
+            if video_file:
+                video.video_file = video_file  # Update video file only if a new file is uploaded
+            video.save()
+        else:  # Create new video record
+            OfferVideo.objects.create(
+                title=title,
+                description=description,
+                video_file=video_file
+            )
+
+        return redirect('offer-videos')  # Redirect after adding/updating
+
+    context = {
+        'videos': videos,
+        'search_query': query,  # Pass search query to template
+        'total_videos': total_videos,
+    }
+    return render(request, 'Web/Offer_video.html', context)
+
+# ✅ Delete Offer Video
+def delete_offer_video(request, video_id):
+    video = get_object_or_404(OfferVideo, id=video_id)
+    video.delete()
+    return redirect('offer-videos')
+
+
+
+
+
+
+
+
+
+# ✅ View for SeoPointBox
+def seo_point_box(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_boxes = SeoPointBox.objects.count()  # Count total SeoPointBoxes
+
+    if query:
+        boxes = SeoPointBox.objects.filter(title__icontains=query)  # Case-insensitive search by title
+    else:
+        boxes = SeoPointBox.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        box_id = request.POST.get('box_id')  # Check if it's an update
+        title = request.POST.get('title')
+        icon = request.FILES.get('icon')
+
+        if box_id:  # Update existing record
+            box = get_object_or_404(SeoPointBox, id=box_id)
+            box.title = title
+            if icon:
+                box.icon = icon  # Update icon only if a new one is uploaded
+            box.save()
+        else:  # Create new record
+            SeoPointBox.objects.create(title=title, icon=icon)
+
+        return redirect('seo-point-box')  # Redirect after adding/updating
+
+    context = {
+        'boxes': boxes,
+        'search_query': query,  # Pass search query to template
+        'total_boxes': total_boxes,
+    }
+    return render(request, 'Web/Seo_Point_Box.html', context)
+
+
+# ✅ Delete SeoPointBox Record
+def delete_seo_point_box(request, box_id):
+    box = get_object_or_404(SeoPointBox, id=box_id)
+    box.delete()
+    return redirect('seo-point-box')
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ✅ Tour Video View
+def tour_videos(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_videos = TourVideo.objects.count()  # Count total videos
+
+    if query:
+        videos = TourVideo.objects.filter(title__icontains=query)  # Case-insensitive search by title
+    else:
+        videos = TourVideo.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        video_id = request.POST.get('video_id')  # Check if it's an update
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        video_file = request.FILES.get('video_file')
+
+        if video_id:  # Update existing video record
+            video = get_object_or_404(TourVideo, id=video_id)
+            video.title = title
+            video.description = description
+            if video_file:
+                video.video_file = video_file  # Update video file only if a new file is uploaded
+            video.save()
+        else:  # Create new video record
+            TourVideo.objects.create(
+                title=title,
+                description=description,
+                video_file=video_file
+            )
+
+        return redirect('tour-videos')  # Redirect after adding/updating
+
+    context = {
+        'videos': videos,
+        'search_query': query,  # Pass search query to template
+        'total_videos': total_videos,
+    }
+    return render(request, 'Web/Tour_video.html', context)
+
+# ✅ Delete Tour Video
+def delete_tour_video(request, video_id):
+    video = get_object_or_404(TourVideo, id=video_id)
+    video.delete()
+    return redirect('tour-videos')
+
+
+
+
+
+
+
+
+
+# ✅ View for Listing and Managing Umrah Banners
+def umrah_banner_list(request):
+    query = request.GET.get('search', '')  # Get search input
+    total_banners = UmrahBanner.objects.count()  # Count total banners
+
+    if query:
+        banners = UmrahBanner.objects.filter(title__icontains=query)  # Search by title
+    else:
+        banners = UmrahBanner.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        banner_id = request.POST.get('banner_id')  # Check if it's an update
+        title = request.POST.get('title')
+        image = request.FILES.get('image')
+
+        if banner_id:  # Update existing banner
+            banner = get_object_or_404(UmrahBanner, id=banner_id)
+            banner.title = title
+            if image:
+                banner.image = image
+            banner.save()
+        else:  # Create a new banner
+            UmrahBanner.objects.create(title=title, image=image)
+
+        return redirect('umrah-banners')  # Redirect after adding/updating
+
+    context = {
+        'banners': banners,
+        'search_query': query,
+        'total_banners': total_banners,
+    }
+    return render(request, 'Web/UmrahBanner.html', context)
+
+
+# ✅ Delete Umrah Banner
+def delete_umrah_banner(request, banner_id):
+    banner = get_object_or_404(UmrahBanner, id=banner_id)
+    banner.delete()
+    return redirect('umrah-banners')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ✅ List and Manage "Why Book Us" Sections
+def why_book_us(request):
+    query = request.GET.get('search', '')  # Get search input from GET request
+    total_entries = WhyBookUs.objects.count()  # Count total entries
+
+    if query:
+        sections = WhyBookUs.objects.filter(title__icontains=query)  # Case-insensitive search by title
+    else:
+        sections = WhyBookUs.objects.all()  # Show all if no search query
+
+    if request.method == "POST":
+        section_id = request.POST.get('section_id')  # Check if it's an update
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+
+        if section_id:  # Update existing section
+            section = get_object_or_404(WhyBookUs, id=section_id)
+            section.title = title
+            section.description = description
+            if image:
+                section.image = image
+            section.save()
+        else:  # Create new section
+            WhyBookUs.objects.create(title=title, description=description, image=image)
+
+        return redirect('why-book-us')  # Redirect after adding/updating
+
+    context = {
+        'sections': sections,
+        'search_query': query,
+        'total_entries': total_entries,
+    }
+    return render(request, 'Web/WhyBookUs.html', context)
+
+# ✅ Delete "Why Book Us" Entry
+def delete_why_book_us(request, section_id):
+    section = get_object_or_404(WhyBookUs, id=section_id)
+    section.delete()
+    return redirect('why-book-us')
